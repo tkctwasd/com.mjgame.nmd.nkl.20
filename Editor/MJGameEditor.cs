@@ -26,7 +26,10 @@ namespace MJGame
             {
                 DrawPoolConfigTab();
             }
-
+            if (GUILayout.Button("RemoveMissingScripts"))
+            {
+                RemoveMissingScripts();
+            }
             EditorGUILayout.Space();
 
         }
@@ -39,6 +42,11 @@ namespace MJGame
         private void DrawUIPanelTab()
         {
             BaseUIWindowsEditor.Init();
+        }
+
+        private void RemoveMissingScripts()
+        {
+            RemoveMissingScriptsEditor.FindAndRemoveMissingInSelected();
         }
     }
 }

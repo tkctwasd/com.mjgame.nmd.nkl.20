@@ -1,87 +1,90 @@
 using UnityEditor;
 using UnityEngine;
 using System.IO;
-
-public class PanelConfigWindowsEditor : EditorWindow
+namespace MJGame
 {
-    private const string DefaultResourcesFolder = "Assets/Resources";
-    private const string DefaultPanelConfigPath = "Assets/Resources/PanelConfig.asset";
-    private const string PanelConfigType = "t:PanelConfigSO";
 
-    private PanelConfigSO panelConfig;
-    private Vector2 scrollPosition;
-
-    public static void ShowWindow()
+    public class PanelConfigWindowsEditor : EditorWindow
     {
-        var window = GetWindow<PanelConfigWindowsEditor>("Panel Config");
-        window.panelConfig = FindOrCreatePanelConfig();
-        window.Show();
-    }
+        private const string DefaultResourcesFolder = "Assets/Resources";
+        private const string DefaultPanelConfigPath = "Assets/Resources/PanelConfig.asset";
+        private const string PanelConfigType = "t:PanelConfigSO";
 
-    private static PanelConfigSO FindOrCreatePanelConfig()
-    {
-        string[] guids = AssetDatabase.FindAssets(PanelConfigType, new[] { "Assets" });
-        PanelConfigSO panelConfig = null;
+        private PanelConfigSO panelConfig;
+        private Vector2 scrollPosition;
 
-        if (guids.Length > 1)
+        public static void ShowWindow()
         {
-            Debug.LogError("You have multiple PanelConfigSO files in your project. Please ensure there is only one file and place it in the 'Assets/Resources' folder.");
+            var window = GetWindow<PanelConfigWindowsEditor>("Panel Config");
+            window.panelConfig = FindOrCreatePanelConfig();
+            window.Show();
         }
 
-        if (guids.Length > 0)
+        private static PanelConfigSO FindOrCreatePanelConfig()
         {
-            string path = AssetDatabase.GUIDToAssetPath(guids[0]);
-            panelConfig = AssetDatabase.LoadAssetAtPath<PanelConfigSO>(path);
-            Debug.Log($"PanelConfig found at: {path}");
-            Selection.activeObject = panelConfig;
-            EditorGUIUtility.PingObject(panelConfig);
+            string[] guids = AssetDatabase.FindAssets(PanelConfigType, new[] { "Assets" });
+            PanelConfigSO panelConfig = null;
+
+            if (guids.Length > 1)
+            {
+                Debug.LogError("You have multiple PanelConfigSO files in your project. Please ensure there is only one file and place it in the 'Assets/Resources' folder.");
+            }
+
+            if (guids.Length > 0)
+            {
+                string path = AssetDatabase.GUIDToAssetPath(guids[0]);
+                panelConfig = AssetDatabase.LoadAssetAtPath<PanelConfigSO>(path);
+                Debug.Log($"PanelConfig found at: {path}");
+                Selection.activeObject = panelConfig;
+                EditorGUIUtility.PingObject(panelConfig);
+                return panelConfig;
+            }
+
+            return CreatePanelConfig();
+        }
+
+        private static PanelConfigSO CreatePanelConfig()
+        {
+            if (!Directory.Exists(DefaultResourcesFolder))
+            {
+                Directory.CreateDirectory(DefaultResourcesFolder);
+                AssetDatabase.Refresh();
+            }
+
+            PanelConfigSO panelConfig = ScriptableObject.CreateInstance<PanelConfigSO>();
+            AssetDatabase.CreateAsset(panelConfig, DefaultPanelConfigPath);
+            AssetDatabase.SaveAssets();
+            AssetDatabase.Refresh();
+
+            Debug.Log($"PanelConfig created at: {DefaultPanelConfigPath}");
             return panelConfig;
         }
 
-        return CreatePanelConfig();
-    }
-
-    private static PanelConfigSO CreatePanelConfig()
-    {
-        if (!Directory.Exists(DefaultResourcesFolder))
+        private void OnGUI()
         {
-            Directory.CreateDirectory(DefaultResourcesFolder);
-            AssetDatabase.Refresh();
+            if (panelConfig == null)
+            {
+                EditorGUILayout.HelpBox("No PanelConfigSO found or created. Please restart the editor.", MessageType.Warning);
+                return;
+            }
+
+            EditorGUILayout.LabelField("Panel Config Editor", EditorStyles.boldLabel);
+            EditorGUILayout.Space();
+
+            // Scroll view for large lists
+            scrollPosition = EditorGUILayout.BeginScrollView(scrollPosition);
+
+            SerializedObject serializedConfig = new SerializedObject(panelConfig);
+            SerializedProperty panel = serializedConfig.FindProperty("panel");
+
+            // Display list of pool items
+            EditorGUILayout.PropertyField(panel, new GUIContent("Panel"), true);
+
+            serializedConfig.ApplyModifiedProperties();
+
+            EditorGUILayout.EndScrollView();
+
+            EditorGUILayout.Space();
         }
-
-        PanelConfigSO panelConfig = ScriptableObject.CreateInstance<PanelConfigSO>();
-        AssetDatabase.CreateAsset(panelConfig, DefaultPanelConfigPath);
-        AssetDatabase.SaveAssets();
-        AssetDatabase.Refresh();
-
-        Debug.Log($"PanelConfig created at: {DefaultPanelConfigPath}");
-        return panelConfig;
-    }
-
-    private void OnGUI()
-    {
-        if (panelConfig == null)
-        {
-            EditorGUILayout.HelpBox("No PanelConfigSO found or created. Please restart the editor.", MessageType.Warning);
-            return;
-        }
-
-        EditorGUILayout.LabelField("Panel Config Editor", EditorStyles.boldLabel);
-        EditorGUILayout.Space();
-
-        // Scroll view for large lists
-        scrollPosition = EditorGUILayout.BeginScrollView(scrollPosition);
-
-        SerializedObject serializedConfig = new SerializedObject(panelConfig);
-        SerializedProperty panel = serializedConfig.FindProperty("panel");
-
-        // Display list of pool items
-        EditorGUILayout.PropertyField(panel, new GUIContent("Panel"), true);
-
-        serializedConfig.ApplyModifiedProperties();
-
-        EditorGUILayout.EndScrollView();
-
-        EditorGUILayout.Space();
     }
 }

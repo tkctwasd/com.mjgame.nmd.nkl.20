@@ -1,0 +1,63 @@
+using Newtonsoft.Json;
+using UnityEngine;
+
+namespace MJGame
+{
+    public class DataUtility<T> where T : class
+    {
+        public T Profile;
+        IData<T> typeData;
+        string key;
+        public DataUtility(string key)
+        {
+            this.key = key;
+            Init();
+        }
+
+        public virtual void Init()
+        {
+            typeData = new PlayerPrefsData<T>(key);
+            LoadData();
+            Application.focusChanged += Application_focusChanged;
+            TickUpdateManager.OnPause += Application_pauseChanged;
+            Application.quitting += Application_quitting;
+        }
+
+        void LoadData()
+        {
+            Profile = typeData.LoadData();
+        }
+
+        public void Save()
+        {
+            string data = JsonConvert.SerializeObject(Profile);
+            typeData.Save(data);
+        }
+
+        private void Application_focusChanged(bool isFocus)
+        {
+            if (!isFocus)
+            {
+                Debug.Log("Save-Application_focusChanged");
+                Save();
+            }
+        }
+
+        private void Application_pauseChanged(bool isPause)
+        {
+
+            if (isPause)
+            {
+                Debug.Log("Save-Application_pauseChanged");
+                Save();
+            }
+        }
+
+        private void Application_quitting()
+        {
+            Save();
+            Debug.Log("Save");
+        }
+    }
+
+}

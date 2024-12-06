@@ -1,7 +1,8 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
-
+namespace MJGame{
+    
 public class CreateUIBaseEditor
 {
     public static Canvas CreateCanvasUI(Vector2 resolution)
@@ -151,4 +152,5 @@ public class CreateUIBaseEditor
 
 
 
+}
 }

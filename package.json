@@ -1,37 +1,59 @@
 {
-    "name": "com.mjgame.mjgame",
-    "version": "1.0.1",
+    "name": "com.mjgame.nmd.nkl.20",
+    "version": "1.0.4",
     "displayName": "MJGame",
-    "description": "This is a package created by nmd.nkl to serve the work of making Unity Games. mainly in the 2D genre. contains many commonly used codes that are synthesized, faster and simpler ....",
-    "unity": "2021.3", 
+    "description": "MJGame is a package developed by nmd.nkl to enhance Unity game development, particularly for 2D games. It includes a collection of essential, reusable code snippets designed to accelerate workflows and simplify the development process.",
+    "unity": "2021.3",
+    "release": {
+        "version": "1.0.4",
+        "notes": "Added new samples and updated dependencies.",
+        "newFeatures": [
+            "Added Data management for player data in the game",
+            "Implemented Newtonsoft.JSON for data handling",
+            "Added RemoveMissingScripts feature to clean up missing scripts in the scene",
+            "Updated MJGameEditor with new features and improvements",
+            "Added UI interface to view saved player data in samples"
+        ],
+        "date": "2024-12-06 23:46:23"
+    },
     "dependencies": {
-      "com.unity.textmeshpro": "3.0.9"
+        "com.unity.textmeshpro": "3.0.9"
     },
     "samples": [
-      {
-        "displayName": "Pool",
-        "description": "Example of Pool ...",
-        "path": "Samples~/Pool"
-      },
-      {
-        "displayName": "State Machine",
-        "description": "Example of State Machine ...",
-        "path": "Samples~/StateMachine"
-      },
-      {
-        "displayName": "UI",
-        "description": "Example of UI ...",
-        "path": "Samples~/UI"
-      }
+        {
+            "displayName": "Pool",
+            "path": "Samples~/Pool",
+            "description": "An example demonstrating the use of object pooling to efficiently manage resources and optimize game performance."
+        },
+        {
+            "displayName": "State Machine",
+            "path": "Samples~/StateMachine",
+            "description": "An example showcasing the implementation of a State Machine for streamlined game logic management."
+            
+        },
+        {
+            "displayName": "UI",
+            "path": "Samples~/UI",
+            "description": "An example illustrating advanced techniques for creating and managing user interfaces in Unity."
+        },
+        {
+            "displayName": "Data",
+            "path": "Samples~/Data",
+            "description": "A comprehensive example showcasing advanced methods for designing and handling user interfaces in Unity, with a focus on data management and interactive elements."
+        },
+        {
+            "displayName": "ViewPlayerPrefs",
+            "path": "Samples~/ViewPlayerPrefs",
+            "description": "ViewPlayerPrefs is a simple tool that allows you to view and edit PlayerPrefs in Unity Editor."
+        }
     ],
     "keywords": [
-      "unity",
-      "package",
-      "textmeshpro"
+        "unity",
+        "package",
+        "textmeshpro"
     ],
     "author": {
-      "name": "nmd.nkl.20",
-      "email": "mindongun123@gmail.com"
+        "name": "nmd.nkl.20",
+        "email": "mindongun123@gmail.com"
     }
-  }
-  
+}
