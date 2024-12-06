@@ -1,0 +1,37 @@
+{
+    "name": "com.mjgame.mjgame",
+    "version": "1.0.0",
+    "displayName": "MJGame",
+    "description": "This is a package created by nmd.nkl to serve the work of making Unity Games. mainly in the 2D genre. contains many commonly used codes that are synthesized, faster and simpler ....",
+    "unity": "2021.3", 
+    "dependencies": {
+      "com.unity.textmeshpro": "3.0.6"
+    },
+    "samples": [
+      {
+        "displayName": "Pool",
+        "description": "Example of Pool ...",
+        "path": "Samples~/Pool"
+      },
+      {
+        "displayName": "State Machine",
+        "description": "Example of State Machine ...",
+        "path": "Samples~/StateMachine"
+      },
+      {
+        "displayName": "UI",
+        "description": "Example of UI ...",
+        "path": "Samples~/UI"
+      }
+    ],
+    "keywords": [
+      "unity",
+      "package",
+      "textmeshpro"
+    ],
+    "author": {
+      "name": "nmd.nkl.20",
+      "email": "mindongun123@gmail.com"
+    }
+  }
+  

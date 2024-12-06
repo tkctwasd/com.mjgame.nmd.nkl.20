@@ -1,0 +1,16 @@
+{
+    "name": "MJGame.Runtime.Singleton",
+    "rootNamespace": "",
+    "references": [
+        "GUID:2220fb4ff5656de4287eede38929b81a"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

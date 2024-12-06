@@ -1,0 +1,17 @@
+{
+    "name": "MJGame.Runtime.StateMachine",
+    "rootNamespace": "",
+    "references": [
+        "GUID:4c0092b8cc63bd74581fc1e5a6fdd36a",
+        "GUID:2220fb4ff5656de4287eede38929b81a"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
