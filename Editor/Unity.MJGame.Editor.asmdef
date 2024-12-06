@@ -1,3 +1,17 @@
 {
-	"name": "Unity.MJGame.Editor"
+    "name": "Unity.MJGame.Editor",
+    "rootNamespace": "",
+    "references": [
+        "GUID:d3538cb48b85c6b4094afe29accbffcc",
+        "GUID:92eff7ae59f642a4783dfe1563358580"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
 }

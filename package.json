@@ -1,11 +1,11 @@
 {
     "name": "com.mjgame.mjgame",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "displayName": "MJGame",
     "description": "This is a package created by nmd.nkl to serve the work of making Unity Games. mainly in the 2D genre. contains many commonly used codes that are synthesized, faster and simpler ....",
     "unity": "2021.3", 
     "dependencies": {
-      "com.unity.textmeshpro": "3.0.6"
+      "com.unity.textmeshpro": "3.0.9"
     },
     "samples": [
       {
