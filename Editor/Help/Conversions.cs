@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace MJGame
 {
-    public static class ConversionsExtension
+    public static class Conversions
     {
         public static Quaternion ToQuaternion(this Vector4 v4)
         {

@@ -1,31 +1,16 @@
 {
     "name": "com.mjgame.nmd.nkl.20",
-    "version": "1.0.5",
+    "version": "1.0.6",
     "displayName": "MJGame",
     "description": "MJGame is a package developed by nmd.nkl to enhance Unity game development, particularly for 2D games. It includes a collection of essential, reusable code snippets designed to accelerate workflows and simplify the development process.",
     "unity": "2021.3",
     "release": {
-        "version": "1.0.5",
+        "version": "1.0.6",
         "notes": "Added new samples and updated dependencies.",
         "newFeatures": [
-            "Update additional Extension Collections: Dictionary, ListContainer ...",
-            "Add Attribute Inspector for debugging process"
+            "Add Changelog, License, and Readme files"
         ],
-        "date": "2024-12-07 16:51:02",
-        "changelog": [
-            {
-                "version": "1.0.5",
-                "date": "2024-12-07 16:51:02",
-                "releaseNotes": "Added new samples and updated dependencies.",
-                "newFeatures": [
-                    "Updated additional Extension Collections: Dictionary, ListContainer, etc.",
-                    "Added Attribute Inspector for debugging process"
-                ],
-                "fixesAndImprovements": [
-                    "Remove Attribute ReadOnlyEditor, Update Sample ..."
-                ]
-            }
-        ]
+        "date": "2024-12-07 20:34:23"
     },
     "dependencies": {
         "com.unity.textmeshpro": "3.0.9"
@@ -62,6 +47,8 @@
             "description": "Example of how to use Attributes for debugging"
         }
     ],
+    "documentationUrl": "https://gitlab.com/dongnm/mjgame",
+    "licensesUrl": "https://opensource.org/licenses/MIT",
     "keywords": [
         "unity",
         "package",

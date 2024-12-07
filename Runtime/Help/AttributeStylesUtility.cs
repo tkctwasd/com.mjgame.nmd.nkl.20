@@ -238,14 +238,14 @@ namespace MJGame
                 _ => throw new NotImplementedException(textAlignment.ToString()),
             };
         }
-        public static InternalLabelStyleExtension ToInteralStyle(this LabelStyle labelStyle)
+        public static InternalStylesUtility ToInteralStyle(this LabelStyle labelStyle)
         {
             return labelStyle switch
             {
-                LabelStyle.NoLabel => InternalLabelStyleExtension.NoLabel,
-                LabelStyle.EmptyLabel => InternalLabelStyleExtension.EmptyLabel,
-                LabelStyle.NoSpacing => InternalLabelStyleExtension.NoSpacing,
-                LabelStyle.FullSpacing => InternalLabelStyleExtension.FullSpacing,
+                LabelStyle.NoLabel => InternalStylesUtility.NoLabel,
+                LabelStyle.EmptyLabel => InternalStylesUtility.EmptyLabel,
+                LabelStyle.NoSpacing => InternalStylesUtility.NoSpacing,
+                LabelStyle.FullSpacing => InternalStylesUtility.FullSpacing,
                 _ => throw new NotImplementedException($"{labelStyle} not found"),
             };
         }

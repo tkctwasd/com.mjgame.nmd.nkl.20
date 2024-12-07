@@ -1,7 +1,7 @@
 namespace MJGame
 {
 
-    public enum InternalLabelStyleExtension
+    public enum InternalStylesUtility
     {
         /// <summary>
         /// No label. draws the value over full width

@@ -24,12 +24,12 @@ namespace MJGame
             m_TargetsProvider = new TargetsProvider();
 
             SceneView.duringSceneGui += OnSceneGUI;
-            ScriptTracker.OnTargetScriptsChanged += OnTargetScriptsChanged;
+            TrackerAttribute.OnTargetScriptsChanged += OnTargetScriptsChanged;
         }
 
         private void OnTargetScriptsChanged()
         {
-            m_TargetsProvider.FindTargets(ref m_Targets, ScriptTracker.targetScripts);
+            m_TargetsProvider.FindTargets(ref m_Targets, TrackerAttribute.targetScripts);
         }
 
         private void OnSceneGUI(SceneView sceneView)
