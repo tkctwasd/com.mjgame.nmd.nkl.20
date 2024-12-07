@@ -1,20 +1,31 @@
 {
     "name": "com.mjgame.nmd.nkl.20",
-    "version": "1.0.4",
+    "version": "1.0.5",
     "displayName": "MJGame",
     "description": "MJGame is a package developed by nmd.nkl to enhance Unity game development, particularly for 2D games. It includes a collection of essential, reusable code snippets designed to accelerate workflows and simplify the development process.",
     "unity": "2021.3",
     "release": {
-        "version": "1.0.4",
+        "version": "1.0.5",
         "notes": "Added new samples and updated dependencies.",
         "newFeatures": [
-            "Added Data management for player data in the game",
-            "Implemented Newtonsoft.JSON for data handling",
-            "Added RemoveMissingScripts feature to clean up missing scripts in the scene",
-            "Updated MJGameEditor with new features and improvements",
-            "Added UI interface to view saved player data in samples"
+            "Update additional Extension Collections: Dictionary, ListContainer ...",
+            "Add Attribute Inspector for debugging process"
         ],
-        "date": "2024-12-06 23:46:23"
+        "date": "2024-12-07 16:51:02",
+        "changelog": [
+            {
+                "version": "1.0.5",
+                "date": "2024-12-07 16:51:02",
+                "releaseNotes": "Added new samples and updated dependencies.",
+                "newFeatures": [
+                    "Updated additional Extension Collections: Dictionary, ListContainer, etc.",
+                    "Added Attribute Inspector for debugging process"
+                ],
+                "fixesAndImprovements": [
+                    "Remove Attribute ReadOnlyEditor, Update Sample ..."
+                ]
+            }
+        ]
     },
     "dependencies": {
         "com.unity.textmeshpro": "3.0.9"
@@ -29,7 +40,6 @@
             "displayName": "State Machine",
             "path": "Samples~/StateMachine",
             "description": "An example showcasing the implementation of a State Machine for streamlined game logic management."
-            
         },
         {
             "displayName": "UI",
@@ -45,6 +55,11 @@
             "displayName": "ViewPlayerPrefs",
             "path": "Samples~/ViewPlayerPrefs",
             "description": "ViewPlayerPrefs is a simple tool that allows you to view and edit PlayerPrefs in Unity Editor."
+        },
+        {
+            "displayName": "Attributes",
+            "path": "Samples~/Attributes",
+            "description": "Example of how to use Attributes for debugging"
         }
     ],
     "keywords": [

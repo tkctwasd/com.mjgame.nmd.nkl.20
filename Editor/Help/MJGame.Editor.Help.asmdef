@@ -1,3 +1,16 @@
 {
-	"name": "MJGame.Editor.Help"
+    "name": "MJGame.Editor.Help",
+    "rootNamespace": "",
+    "references": [
+        "GUID:30006e12b15331d4ca9f1a12756bf915"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
 }

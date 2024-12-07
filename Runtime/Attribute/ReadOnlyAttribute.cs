@@ -1,16 +1,11 @@
-using System.Collections;
-using System.Collections.Generic;
+﻿
+using System;
 using UnityEngine;
 
-
-public class ReadOnlyAttribute : PropertyAttribute
+namespace MJGame
 {
-    public object DefaultValue { get; private set; }
 
-    public ReadOnlyAttribute() { }
-
-    public ReadOnlyAttribute(object defaultValue)
-    {
-        DefaultValue = defaultValue;
-    }
+    [AttributeUsage(AttributeTargets.Field | AttributeTargets.Property)]
+    public class ReadOnlyAttribute : PropertyAttribute
+    { }
 }

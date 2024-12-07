@@ -2,7 +2,10 @@
     "name": "MJGame.Editor.Attribute",
     "rootNamespace": "",
     "references": [
-        "GUID:36ce2727574618f488a612c6663a5fe1"
+        "GUID:30006e12b15331d4ca9f1a12756bf915",
+        "GUID:36ce2727574618f488a612c6663a5fe1",
+        "GUID:c4b5b6022c662e8448d112ebd3e2f67a",
+        "GUID:e27279cca4882ba47ab6319e5b2e37c4"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

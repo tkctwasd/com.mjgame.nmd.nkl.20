@@ -1,3 +1,16 @@
 {
-	"name": "MJGame.Runtime.Extensions"
+    "name": "MJGame.Runtime.Extensions",
+    "rootNamespace": "",
+    "references": [
+        "GUID:36ce2727574618f488a612c6663a5fe1"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
 }
