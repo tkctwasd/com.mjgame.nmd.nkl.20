@@ -10,9 +10,10 @@ namespace MJGame
 {
 	public class APPWindow : EditorWindow
 	{
+		[Menu("MJGame/PlayerPrefs Editor")]
 		public static void Init()
 		{
-			EditorWindow.GetWindow(typeof(APPWindow)).titleContent = new GUIContent("APPWindow");
+			EditorWindow.GetWindow(typeof(APPWindow)).titleContent = new GUIContent("MJGame PlayerPrefs Editor");
 		}
 
 		private const string UNIQUE_STRING = "0987654321qwertyuiopasdfghjklzxcvbnm[];,.";
