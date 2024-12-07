@@ -10,7 +10,7 @@ namespace MJGame
 {
 	public class APPWindow : EditorWindow
 	{
-		[Menu("MJGame/PlayerPrefs Editor")]
+		[MenuItem("MJGame/PlayerPrefs Editor")]
 		public static void Init()
 		{
 			EditorWindow.GetWindow(typeof(APPWindow)).titleContent = new GUIContent("MJGame PlayerPrefs Editor");
