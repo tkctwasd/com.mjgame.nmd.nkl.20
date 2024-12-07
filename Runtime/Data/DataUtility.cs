@@ -38,7 +38,6 @@ namespace MJGame
         {
             if (!isFocus)
             {
-                Debug.Log("Save-Application_focusChanged");
                 Save();
             }
         }

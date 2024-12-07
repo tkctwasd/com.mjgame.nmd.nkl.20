@@ -42,8 +42,8 @@
             "description": "ViewPlayerPrefs is a simple tool that allows you to view and edit PlayerPrefs in Unity Editor."
         },
         {
-            "displayName": "Attributes",
-            "path": "Samples~/Attributes",
+            "displayName": "Attribute",
+            "path": "Samples~/Attribute",
             "description": "Example of how to use Attributes for debugging"
         }
     ],
