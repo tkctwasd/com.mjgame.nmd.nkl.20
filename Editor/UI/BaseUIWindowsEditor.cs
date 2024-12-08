@@ -28,17 +28,17 @@ namespace MJGame
 
             if (GUILayout.Button("Create PanelUI"))
             {
-                CreateUIBaseEditor.CreatePanelUI(vectorResolution[selectedResolution]);
+                CreateUIBase.CreatePanelUI(vectorResolution[selectedResolution]);
             }
 
             if (GUILayout.Button("Create PanelGamePlay"))
             {
-                CreateUIBaseEditor.CreatePanelGamePlay(vectorResolution[selectedResolution]);
+                CreateUIBase.CreatePanelGamePlay(vectorResolution[selectedResolution]);
             }
 
             if (GUILayout.Button("Create PanelLose"))
             {
-                CreateUIBaseEditor.CreatePanelLose(vectorResolution[selectedResolution]);
+                CreateUIBase.CreatePanelLose(vectorResolution[selectedResolution]);
             }
 
 

@@ -1,13 +1,12 @@
 using System;
 using System.Diagnostics;
 using UnityEngine;
-namespace MJGame
-{
+namespace MJGame {
 
-    [AttributeUsage(AttributeTargets.Field)]
-    [Conditional("UNITY_EDITOR")]
-    public class StaticAttribute : PropertyAttribute
-    {
-    }
+[AttributeUsage(AttributeTargets.Field)]
+[Conditional("UNITY_EDITOR")]
+public class StaticAttribute : PropertyAttribute
+{    
+}
 
 }

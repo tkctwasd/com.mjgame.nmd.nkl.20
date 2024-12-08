@@ -2,10 +2,9 @@
 using System;
 using UnityEngine;
 
-namespace MJGame
-{
+namespace MJGame {
 
-    [AttributeUsage(AttributeTargets.Field | AttributeTargets.Property)]
-    public class ReadOnlyAttribute : PropertyAttribute
-    { }
+[AttributeUsage(AttributeTargets.Field|AttributeTargets.Property)]
+public class ReadOnlyAttribute : PropertyAttribute
+{ }
 }

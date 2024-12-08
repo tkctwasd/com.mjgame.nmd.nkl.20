@@ -1,18 +1,17 @@
-﻿namespace MJGame
+﻿namespace MJGame {
+/// <summary>
+/// It locks the value of a specific axis.
+/// </summary>
+public class UseAxisLockAttribute : SettingsAttribute
 {
-    /// <summary>
-    /// It locks the value of a specific axis.
-    /// </summary>
-    public class UseAxisLockAttribute : SettingsAttribute
+    public Axis axis;
+
+    public UseAxisLockAttribute(Axis axis)
     {
-        public Axis axis;
-
-        public UseAxisLockAttribute(Axis axis)
-        {
-            this.axis = axis;
-        }
+        this.axis = axis;
     }
+}
 
-    public enum Axis { X, Y, Z }
+public enum Axis { X, Y, Z }
 
 }

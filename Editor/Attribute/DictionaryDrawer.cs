@@ -10,9 +10,9 @@ namespace MJGame
 {
 
     [CustomPropertyDrawer(typeof(DictionaryAttribute))]
-    [CustomPropertyDrawer(typeof(SerializableDictionary<,>))]
-    [CustomPropertyDrawer(typeof(SerializableSortedDictionary<,>))]
-    [CustomPropertyDrawer(typeof(ReorderableDictionary<,>))]
+    [CustomPropertyDrawer(typeof(SerializableDictionaryExtension<,>))]
+    [CustomPropertyDrawer(typeof(SerializableSortedDictionaryExtension<,>))]
+    [CustomPropertyDrawer(typeof(ReorderableDictionaryExtension<,>))]
     public class DictionaryDrawer : PropertyDrawer
     {
         //const float errorHeight = 60;
@@ -113,8 +113,8 @@ namespace MJGame
                     customValueLabel = attribute.valueLabel;
                 }
 
-                if (fieldInfo.FieldType.GetGenericTypeDefinition() == typeof(SerializableDictionary<,>)
-                    || fieldInfo.FieldType.GetGenericTypeDefinition() == typeof(SerializableSortedDictionary<,>))
+                if (fieldInfo.FieldType.GetGenericTypeDefinition() == typeof(SerializableDictionaryExtension<,>)
+                    || fieldInfo.FieldType.GetGenericTypeDefinition() == typeof(SerializableSortedDictionaryExtension<,>))
                 {
                     string keysListPath = "keys.values.values";
                     string valuesListPath = "values.values";
@@ -237,7 +237,7 @@ namespace MJGame
                         return totalHeight;
                     };
                 }
-                else if (fieldInfo.FieldType.GetGenericTypeDefinition() == typeof(ReorderableDictionary<,>))
+                else if (fieldInfo.FieldType.GetGenericTypeDefinition() == typeof(ReorderableDictionaryExtension<,>))
                 {
                     string path = "keyValuePairs";
                     SerializedProperty keyValuePairs_instantiate = property.FindPropertyRelative(path);
@@ -454,7 +454,7 @@ namespace MJGame
         }
     }
 
-    [CustomPropertyDrawer(typeof(ReorderableDictionary<,>.SerializableKeyValuePair))]
+    [CustomPropertyDrawer(typeof(ReorderableDictionaryExtension<,>.SerializableKeyValuePair))]
     public class KeyValuePairDrawer : PropertyDrawer
     {
         public static float keyWidth = .4f;

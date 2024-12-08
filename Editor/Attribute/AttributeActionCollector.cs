@@ -2,7 +2,8 @@
 using System.Reflection;
 using Type = System.Type;
 using UnityEngine;
-using MJGame;
+
+namespace MJGame {
 
 internal static class AttributeActionCollector
 {
@@ -59,4 +60,5 @@ internal static class AttributeActionCollector
 
         return null;
     }
+}
 }

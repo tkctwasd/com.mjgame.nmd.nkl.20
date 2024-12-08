@@ -1,11 +1,10 @@
 ﻿using System;
 
-namespace MJGame
+namespace MJGame {
+
+[AttributeUsage(AttributeTargets.Field)]
+public abstract class Attribute : System.Attribute
 {
 
-    [AttributeUsage(AttributeTargets.Field)]
-    public abstract class Attribute : System.Attribute
-    {
-
-    }
+}
 }

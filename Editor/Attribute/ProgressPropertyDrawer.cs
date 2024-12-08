@@ -1,7 +1,6 @@
 using UnityEngine;
 using UnityEditor;
 using UnityEngine.UI;
-
 namespace MJGame {
 
 [CustomPropertyDrawer(typeof(ProgressAttribute))]

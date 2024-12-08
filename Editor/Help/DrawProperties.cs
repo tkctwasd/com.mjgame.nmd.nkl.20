@@ -4,7 +4,6 @@ using System.Linq;
 using UnityEditor;
 using UnityEngine;
 using Object = UnityEngine.Object;
-
 namespace MJGame {
 
 public static class DrawProperties
@@ -147,19 +146,19 @@ public static class DrawProperties
             };
         }
     }
-    public static void DrawLabelSettings(Rect position, SerializedProperty property, GUIContent label, InternalStylesUtility style)
+    public static void DrawLabelSettings(Rect position, SerializedProperty property, GUIContent label, InternalStyles style)
     {
         switch (style)
         {
-            case InternalStylesUtility.NoLabel:
+            case InternalStyles.NoLabel:
                 DrawProperties.PropertyFieldWithoutLabel(position, property, true);
                 break;
 
-            case InternalStylesUtility.EmptyLabel:
+            case InternalStyles.EmptyLabel:
                 DrawProperties.PropertyField(position, new GUIContent(" "), property, true);
                 break;
 
-            case InternalStylesUtility.NoSpacing:
+            case InternalStyles.NoSpacing:
                 if (property.propertyType == SerializedPropertyType.Generic)
                 {
                     DrawProperties.PropertyField(position, label, property, true);
@@ -175,7 +174,7 @@ public static class DrawProperties
                 }
                 break;
 
-            case InternalStylesUtility.FullSpacing:
+            case InternalStyles.FullSpacing:
                 DrawProperties.PropertyField(position, label, property, true);
                 break;
             default:

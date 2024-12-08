@@ -4,8 +4,8 @@ using UnityEditor;
 using Type = System.Type;
 using System.Reflection;
 using System.Linq;
-using MJGame;
 
+namespace MJGame {
 
 public abstract class AttributeAction<TAttr> : AttributeActionBase where TAttr : Attribute
 {
@@ -20,4 +20,5 @@ public abstract class AttributeAction<TAttr> : AttributeActionBase where TAttr :
     }
 
     protected abstract void OnSceneGUI(SerializedProperty property);
+}
 }

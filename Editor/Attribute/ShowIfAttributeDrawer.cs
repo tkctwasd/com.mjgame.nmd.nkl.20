@@ -4,9 +4,7 @@ using System.Linq;
 using System.Reflection;
 using UnityEditor;
 using UnityEngine;
-
 namespace MJGame {
-
 
 [CustomPropertyDrawer(typeof(ShowIfAttribute))]
 public class ShowIfAttributeDrawer : PropertyDrawer

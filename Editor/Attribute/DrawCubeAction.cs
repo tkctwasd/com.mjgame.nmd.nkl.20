@@ -1,8 +1,8 @@
 ﻿using UnityEditor;
 using UnityEngine;
-
 namespace MJGame
 {
+
     internal class DrawCubeAction : AttributeAction<DrawCubeAttribute>
     {
         protected override void OnSceneGUI(SerializedProperty property)

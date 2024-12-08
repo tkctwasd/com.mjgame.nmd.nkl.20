@@ -1,9 +1,9 @@
 using System;
 using System.Diagnostics;
 using UnityEngine;
-
 namespace MJGame
 {
+
 
     /// <summary>
     /// Hides the field in the inspector but not attributes attached to it

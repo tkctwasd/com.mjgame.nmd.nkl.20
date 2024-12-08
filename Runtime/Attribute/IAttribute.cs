@@ -1,8 +1,7 @@
-namespace MJGame
+namespace MJGame {
+public interface IAttribute 
 {
-    public interface IAttribute
-    {
-
-    }
+   
+}
 
 }

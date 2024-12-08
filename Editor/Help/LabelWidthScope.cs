@@ -1,24 +1,23 @@
 using System;
 using UnityEditor;
+namespace MJGame {
 
-namespace MJGame
+public class LabelWidthScope : IDisposable
 {
-    public class LabelWidthScope : IDisposable
-    {
-        float oldLabelWidth;
+    float oldLabelWidth;
 
-        public LabelWidthScope()
-        {
-            oldLabelWidth = EditorGUIUtility.labelWidth;
-        }
-        public LabelWidthScope(float newLabelWidth)
-        {
-            oldLabelWidth = EditorGUIUtility.labelWidth;
-            EditorGUIUtility.labelWidth = newLabelWidth;
-        }
-        public void Dispose()
-        {
-            EditorGUIUtility.labelWidth = oldLabelWidth;
-        }
+    public LabelWidthScope()
+    {
+        oldLabelWidth = EditorGUIUtility.labelWidth;
     }
+    public LabelWidthScope(float newLabelWidth)
+    {
+        oldLabelWidth = EditorGUIUtility.labelWidth;
+        EditorGUIUtility.labelWidth = newLabelWidth;
+    }
+    public void Dispose()
+    {
+        EditorGUIUtility.labelWidth = oldLabelWidth;
+    }
+}
 }

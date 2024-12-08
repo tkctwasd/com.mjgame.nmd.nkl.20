@@ -1,12 +1,10 @@
 using System;
+namespace MJGame {
 
-namespace MJGame
+/// <summary>
+/// Menu: Tools/ScriptBoy/Ehandles/Hotkeys
+/// </summary>
+public class UseArrayHotkeysAttribute : SettingsAttribute
 {
-
-    /// <summary>
-    /// Menu: Tools/ScriptBoy/Ehandles/Hotkeys
-    /// </summary>
-    public class UseArrayHotkeysAttribute : SettingsAttribute
-    {
-    }
+}
 }

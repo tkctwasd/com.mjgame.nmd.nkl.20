@@ -4,7 +4,7 @@ using UnityEditor;
 using Type = System.Type;
 using System.Reflection;
 using System.Linq;
-using MJGame;
+namespace MJGame {
 
 public abstract class AttributeActionBase : IAttributeAction
 {
@@ -190,4 +190,5 @@ public abstract class AttributeActionBase : IAttributeAction
 
         return current;
     }
+}
 }

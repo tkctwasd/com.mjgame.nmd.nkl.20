@@ -17,3 +17,9 @@
 ##### **Fixed**
 - `README.md` StateMachine, Pool
 - `ScriptTracker.cs` --> `TrackerAttribute.cs`
+
+
+--
+> **[1.0.7] - 2024-12-08**
+##### **Fixed**
+- `.assembly`

@@ -1,0 +1,16 @@
+{
+    "name": "MJGame.Editor",
+    "rootNamespace": "",
+    "references": [
+        "GUID:5482e2a91f8a87748938efba50ae772f"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
