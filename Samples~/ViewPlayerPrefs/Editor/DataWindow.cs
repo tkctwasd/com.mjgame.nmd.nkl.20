@@ -8,12 +8,12 @@ using UnityEngine;
 
 namespace MJGame
 {
-	public class APPWindow : EditorWindow
+	public class DataWindow : EditorWindow
 	{
-		[MenuItem("MJGame/PlayerPrefs Editor")]
+		[MenuItem("MJGame/Data")]
 		public static void Init()
 		{
-			EditorWindow.GetWindow(typeof(APPWindow)).titleContent = new GUIContent("MJGame PlayerPrefs Editor");
+			EditorWindow.GetWindow(typeof(DataWindow)).titleContent = new GUIContent("Data");
 		}
 
 		private const string UNIQUE_STRING = "0987654321qwertyuiopasdfghjklzxcvbnm[];,.";
