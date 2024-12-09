@@ -16,18 +16,18 @@ MonoBehaviour:
   - name: Chapter1
     clip: {fileID: 8300000, guid: 3c22a9a632ae96a4d90997da391aec32, type: 3}
     loop: 1
-    volume: 0
+    volume: 1
   - name: Chapter2
     clip: {fileID: 8300000, guid: 99140e29ef9d66b42a1cc411535a5400, type: 3}
     loop: 1
-    volume: 0
+    volume: 1
   vfxClips:
   - name: MonsterWarning
     clip: {fileID: 8300000, guid: 099cf2a78e8329745b7562e7627011ae, type: 3}
     loop: 0
-    volume: 0
+    volume: 1
   sfxClips:
   - name: ClickButton
     clip: {fileID: 8300000, guid: a51daffa53888154a9402bcb084573ea, type: 3}
     loop: 0
-    volume: 0
+    volume: 1

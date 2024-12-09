@@ -7,12 +7,12 @@ namespace MJGame
 
     public class AudioManager : SingletonComponent<AudioManager>
     {
-        private Dictionary<string, Pool<AudioPool>> audioPools = new Dictionary<string, Pool<AudioPool>>();
+        private Dictionary<string, Pool<AudioPool>> audioPools = new();
         private AudioConfigSO audioConfigSO;
         private GameObject prefabAudioPool;
-        Dictionary<string, ItemAudio> vfxAudioClips = new Dictionary<string, ItemAudio>();
-        Dictionary<string, ItemAudio> bgAudioClips = new Dictionary<string, ItemAudio>();
-        Dictionary<string, ItemAudio> sfxAudioClips = new Dictionary<string, ItemAudio>();
+        Dictionary<string, ItemAudio> vfxAudioClips = new();
+        Dictionary<string, ItemAudio> bgAudioClips = new();
+        Dictionary<string, ItemAudio> sfxAudioClips = new();
 
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
         static void Initialize()
@@ -64,19 +64,15 @@ namespace MJGame
             foreach (ItemAudio item in vfxClips)
             {
                 vfxAudioClips.Add(item.name, item);
-                Debug.Log(item.name);
             }
 
             foreach (ItemAudio item in bgClips)
             {
                 bgAudioClips.Add(item.name, item);
-                Debug.Log(item.name);
-
             }
 
             foreach (ItemAudio item in sfxClips)
             {
-                Debug.Log(item.name);
                 sfxAudioClips.Add(item.name, item);
             }
         }
