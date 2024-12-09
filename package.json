@@ -53,7 +53,7 @@
         }
     ],
     "documentationUrl": "https://gitlab.com/dongnm/mjgame",
-    "licensesUrl": "https://opensource.org/licenses/MIT",
+    "licensesUrl": "https://gitlab.com/dongnm/mjgame/-/blob/main/LICENSE.md",
     "keywords": [
         "unity",
         "package",

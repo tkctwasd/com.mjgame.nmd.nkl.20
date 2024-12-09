@@ -19,13 +19,13 @@
 - `ScriptTracker.cs` --> `TrackerAttribute.cs`
 
 
---
+---
 > **[1.0.7] - 2024-12-08**
 ##### **Fixed**
 - `.assembly`
 
 
--- 
+-- -
 > **[1.0.8] - 2024-12-09**
 ##### **Added**
 - `Audio`

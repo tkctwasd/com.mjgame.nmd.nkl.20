@@ -22,6 +22,7 @@ MJGame streamlines Unity development with commonly used and reusable tools:
 - `Extensions`: Enhance productivity with helpful utilities for GameObject, Transform, and List operations.
 - `Custom Attributes`: Make debugging and inspector customization easier with attributes like [ReadOnly] and [DebugField]
 - `UI`: Predefined UI components and helpers to speed up creating and managing menus, buttons, and other elements.
+- `Audio`: Simple support for managing and controlling audio in the game.
 
 
 ## Support
