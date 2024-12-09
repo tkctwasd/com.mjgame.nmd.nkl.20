@@ -1,16 +1,16 @@
 {
     "name": "com.mjgame.nmd.nkl.20",
-    "version": "1.0.7",
+    "version": "1.0.8",
     "displayName": "MJGame",
     "description": "MJGame is a package developed by nmd.nkl to enhance Unity game development, particularly for 2D games. It includes a collection of essential, reusable code snippets designed to accelerate workflows and simplify the development process.",
     "unity": "2021.3",
     "release": {
-        "version": "1.0.7",
+        "version": "1.0.8",
         "notes": "Added new samples and updated dependencies.",
         "newFeatures": [
-            "Fix .assembly"
+            "AudioManager in game"
         ],
-        "date": "2024-12-08 22:09:23"
+        "date": "2024-12-09 14:24:23"
     },
     "dependencies": {
         "com.unity.textmeshpro": "3.0.9"
@@ -45,6 +45,11 @@
             "displayName": "Attribute",
             "path": "Samples~/Attribute",
             "description": "Example of how to use Attributes for debugging"
+        },
+        {
+            "displayName": "Audio",
+            "path": "Samples~/Audio",
+            "description": "This sample demonstrates how to utilize Attributes for enhanced debugging and debugging workflow."
         }
     ],
     "documentationUrl": "https://gitlab.com/dongnm/mjgame",

@@ -3,12 +3,12 @@ using UnityEngine;
 
 namespace MJGame
 {
-    public class MJGameEditor : EditorWindow
+    public class MJGameWindowsEditor : EditorWindow
     {
         [MenuItem("MJGame/MJGameEditor %m")]
         public static void ShowWindow()
         {
-            MJGameEditor window = GetWindow<MJGameEditor>("MJGame Editor");
+            MJGameWindowsEditor window = GetWindow<MJGameWindowsEditor>("MJGame Editor");
             window.Show();
         }
 
@@ -26,6 +26,10 @@ namespace MJGame
             {
                 DrawPoolConfigTab();
             }
+            if (GUILayout.Button("Audio"))
+            {
+                DrawAudioConfigTab();
+            }
             if (GUILayout.Button("RemoveMissingScripts"))
             {
                 RemoveMissingScripts();
@@ -41,13 +45,17 @@ namespace MJGame
 
         private void DrawUIPanelTab()
         {
-            BaseUIWindowsEditor.Init();
+            BaseUIWindowsEditor.ShowWindow();
+        }
+        private void DrawAudioConfigTab()
+        {
+            AudioConfigWindowsEditor.ShowWindow();
         }
 
         private void RemoveMissingScripts()
         {
             RemoveMissingScriptsEditor.FindAndRemoveMissingInSelected();
         }
-        
+
     }
 }

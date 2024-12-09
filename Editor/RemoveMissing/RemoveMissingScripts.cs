@@ -5,7 +5,7 @@ using UnityEditor;
 
 namespace MJGame
 {
-    public class RemoveMissingScriptsEditor : EditorWindow
+    public class RemoveMissingScriptsEditor 
     {
 
         public static void FindAndRemoveMissingInSelected()

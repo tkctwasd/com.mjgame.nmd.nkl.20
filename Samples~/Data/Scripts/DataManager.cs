@@ -11,7 +11,7 @@ namespace MJGame
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
         protected static void OnInit()
         {
-            PlayerUtility = new PlayerUtility("gameplay_data");
+            PlayerUtility = new PlayerUtility("GamePlay_Data");
         }
     }
 }

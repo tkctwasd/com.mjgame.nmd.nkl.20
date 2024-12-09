@@ -7,8 +7,8 @@ namespace MJGame
 {
     public class ObjectPool : TickBehaviour
     {
-        [ContextMenu("Return")]
-        public void Return()
+        [Button("Return")]
+        public virtual void Return()
         {
             SingletonComponent<PoolManager>.Instance.ReturnObject(this, this.name);
         }

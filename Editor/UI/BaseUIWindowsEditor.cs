@@ -13,7 +13,7 @@ namespace MJGame
         private string[] resolutions = new string[] { "1080 x 1920", "1920 x 1080" };
         private Vector2Int[] vectorResolution = new Vector2Int[] { new Vector2Int(1080, 1920), new Vector2Int(1920, 1080) };
 
-        public static void Init()
+        public static void ShowWindow()
         {
             BaseUIWindowsEditor window = (BaseUIWindowsEditor)EditorWindow.GetWindow(typeof(BaseUIWindowsEditor));
             window.panelConfig = window.FindOrCreatePanelConfig();
@@ -69,7 +69,6 @@ namespace MJGame
 
             EditorGUILayout.Space();
         }
-
 
 
         private const string DefaultResourcesFolder = "Assets/Resources";

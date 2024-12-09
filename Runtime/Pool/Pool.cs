@@ -5,7 +5,7 @@ using UnityEngine;
 namespace MJGame
 {
 
-    public class Pool<T> where T : ObjectPool
+    public class Pool<T> : IEnumerable<T> where T : ObjectPool
     {
         private List<T> pool = new List<T>();
         private GameObject prefab;
@@ -54,6 +54,16 @@ namespace MJGame
         public void ReturnObject(T obj)
         {
             GameObjectExtension.ActiveObj(obj?.gameObject, false);
+        }
+
+        public IEnumerator<T> GetEnumerator()
+        {
+            return pool.GetEnumerator();
+        }
+
+        System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
+        {
+            return pool.GetEnumerator();
         }
     }
 

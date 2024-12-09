@@ -47,7 +47,6 @@ namespace MJGame
 
             if (isPause)
             {
-                Debug.Log("Save-Application_pauseChanged");
                 Save();
             }
         }

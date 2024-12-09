@@ -6,9 +6,9 @@ using UnityEngine;
 namespace MJGame
 {
 
-    public class CreatePoolObject : MonoBehaviour
+    public class CreatePoolObject : TickBehaviour
     {
-        [ContextMenu("test")]
+        [Button]
         public void Test()
         {
             SingletonComponent<PoolManager>.Instance.GetObject("ObjectPool");

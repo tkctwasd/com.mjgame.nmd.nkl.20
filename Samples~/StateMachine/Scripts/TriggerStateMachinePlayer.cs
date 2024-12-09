@@ -6,19 +6,19 @@ namespace MJGame
 {
     public class TriggerStateMachinePlayer : TriggerStateMachine<StateMachinePlayer>
     {
-        [ContextMenu("Call Run")]
+        [Button("Call Run")]
         public void Run()
         {
             stateMachineContext.Trigger("run");
         }
 
-        [ContextMenu("Call Idle")]
+        [Button("Call Idle")]
         public void Idle()
         {
             stateMachineContext.Trigger("idle");
         }
 
-        [ContextMenu("Call Dead")]
+        [Button("Call Dead")]
         public void Dead()
         {
             stateMachineContext.Trigger("dead");
