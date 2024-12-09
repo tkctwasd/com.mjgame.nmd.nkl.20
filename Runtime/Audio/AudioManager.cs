@@ -49,7 +49,7 @@ namespace MJGame
             audioConfigSO = Resources.Load<AudioConfigSO>("AudioConfig");
             if (audioConfigSO == null)
             {
-                Debug.LogError("AudioConfig not found in Resources folder");
+                Debug.Log("AudioConfig not found in Resources folder");
                 return;
             }
             InitAudioClipDictionary(audioConfigSO);
