@@ -4,15 +4,15 @@ using UnityEngine;
 
 namespace MJGame
 {
-    public partial class DataManager
+    public class DataManagerCustom
     {
         public static PlayerUtility PlayerUtility { get; private set; }
 
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
-        protected static void OnInit()
+        public static void OnInit()
         {
-            PlayerUtility = new PlayerUtility("GamePlay_Data");
+            PlayerUtility = new PlayerUtility("DataPlayer");
+            Debug.Log("DataManagerCustom has been initialized and added to the scene.");
         }
     }
 }
-

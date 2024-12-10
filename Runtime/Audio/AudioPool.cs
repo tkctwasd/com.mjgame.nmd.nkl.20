@@ -20,11 +20,9 @@ namespace MJGame
         }
         public void Setup(ItemAudio item, string key)
         {
-            float volume = 1;
-            volume = PlayerPrefs.GetFloat("Volume", 1);
             this.key = key;
             audioSource.clip = item.clip;
-            audioSource.volume = volume != 1 ? volume : item.volume;
+            audioSource.volume =  DataManager.DataGameUtility.Profile.volume;
             audioSource.loop = item.loop;
             audioSource.Play();
             if (!item.loop)

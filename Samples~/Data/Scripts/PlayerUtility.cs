@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 namespace MJGame
@@ -9,5 +10,4 @@ namespace MJGame
         {
         }
     }
-
 }

@@ -8,18 +8,20 @@ namespace MJGame
     public class AudioVolume : TickBehaviour
     {
         private Slider sliderVolume;
+        public bool IsAnimationCurve = false;
+        [ShowIf("IsAnimationCurve")]
+        [SerializeField] private AnimationCurve volumeCurve;
 
         protected override void Awake()
         {
             base.Awake();
             sliderVolume = GetComponent<Slider>();
-            float volume = PlayerPrefs.GetFloat("Volume", 1);
-            sliderVolume.value = ReverseValueVolume(volume);
+            sliderVolume.value = ReverseValueVolume();
             sliderVolume.onValueChanged.AddListener(ChangeVolume);
         }
         public void ChangeVolume(float volume)
         {
-            PlayerPrefs.SetFloat("Volume", ValueVolume(volume));
+            DataManager.DataGameUtility.Profile.volume = CalculateVolume(volume);
         }
 
         #region Calculate Volume
@@ -32,9 +34,6 @@ namespace MJGame
         {
             return Mathf.Pow(10, volume * Mathf.Log10(2)) - 1;
         }
-
-
-        [SerializeField] private AnimationCurve volumeCurve;
 
         private float CalculateVolumeAnimationCurve(float volume)
         {
@@ -60,6 +59,23 @@ namespace MJGame
                 sliderValue += precision;
             }
             return closestSliderValue;
+        }
+        private float CalculateVolume(float volume)
+        {
+            if (IsAnimationCurve)
+            {
+                return CalculateVolumeAnimationCurve(volume);
+            }
+            return ValueVolume(volume);
+        }
+        private float ReverseValueVolume()
+        {
+            float volume = DataManager.DataGameUtility.Profile.volume;
+            if (IsAnimationCurve)
+            {
+                return ReverseCalculateVolumeAnimationCurve(volume);
+            }
+            return ReverseValueVolume(volume);
         }
         #endregion
     }
