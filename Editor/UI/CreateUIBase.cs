@@ -25,7 +25,6 @@ public class CreateUIBase
         scaler.referenceResolution = resolution;
 
         canvasObject.AddComponent<GraphicRaycaster>();
-        canvasObject.AddComponent<UIManager>();
 
         return canvas;
     }
