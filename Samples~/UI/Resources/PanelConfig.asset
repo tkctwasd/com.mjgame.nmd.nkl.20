@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: df8d491f569c75b4a933c5f26aed3f90, type: 3}
   m_Name: PanelConfig
   m_EditorClassIdentifier: 
-  panel:
+  Panels:
   - {fileID: 2154433821269536406, guid: c3637a49940b0fb41ba0dacba40609a7, type: 3}
   - {fileID: 8188477061714528239, guid: bee788a3027e75e44bb5f076f9b3fd4c, type: 3}
+  - {fileID: 702409009412404370, guid: c8262db20081e074ebff3fd69b36f3d9, type: 3}

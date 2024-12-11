@@ -23,9 +23,9 @@ public class PanelGamePlay : BaseUI
         BtnSetting.onClick.AddListener(OnClickBtnSetting);
     }
 
-    public override void OnStart()
+    public override void SetInfo()
     {
-        base.OnStart();
+        base.SetInfo();
         UIStart();
     }
 

@@ -1,92 +1,87 @@
-﻿using UnityEngine;
-using System.Collections;
-using MJGame;
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
 
-
-[RequireComponent(typeof(CanvasGroup))]
-public class BaseUI : TickBehaviour
+namespace MJGame
 {
-    private CanvasGroup canvasGroup;
-    public float fadeDuration = 1f;
 
-    Coroutine coroutine;
-    private void OnValidate()
+    [RequireComponent(typeof(CanvasGroup))]
+    public abstract class BaseUI : TickBehaviour
     {
-        if (canvasGroup == null)
+        public CanvasGroup Group;
+#if UNITY_EDITOR
+        void OnValidate()
         {
-            canvasGroup = GetComponent<CanvasGroup>();
+            Group = GetComponent<CanvasGroup>();
+            Debug.Log(typeof(BaseUI).Name + " OnValidate");
         }
-    }
+#endif
 
-    protected override void Awake()
-    {
-        base.Awake();
-        canvasGroup = GetComponent<CanvasGroup>();
-        Init();
-    }
-
-    private void Start()
-    {
-        OnStart();
-    }
-
-    public virtual void Init() { }
-
-    public virtual void OnStart() { }
-
-    public void OnShow()
-    {
-        if (gameObject.activeSelf) return;
-        GameObjectExtension.ActiveObj(gameObject, true);
-        ResetCoroutine();
-        coroutine = StartCoroutine(FadeInPopup());
-    }
-
-    public void OnHide()
-    {
-        if (!gameObject.activeSelf) return;
-        ResetCoroutine();
-        coroutine = StartCoroutine(FadeOutPopup());
-    }
-
-    private void ResetCoroutine()
-    {
-        if (coroutine != null)
+        protected override void Awake()
         {
-            StopCoroutine(coroutine);
-            coroutine = null;
+            base.Awake();
+            Init();
         }
-    }
-
-    private IEnumerator FadeInPopup()
-    {
-        float timeElapsed = 0f;
-
-        canvasGroup.alpha = 0f;
-
-        while (timeElapsed < fadeDuration)
+        public virtual void SetInfo() { }
+        public virtual void Init() { }
+        [Button]
+        public virtual void OnShow()
         {
-            canvasGroup.alpha = Mathf.Lerp(0f, 1f, timeElapsed / fadeDuration);
-            timeElapsed += Time.deltaTime;
-            yield return null;
+            Group.alpha = 1;
+            Group.blocksRaycasts = true;
+            gameObject.SetActive(true);
+        }
+        IEnumerator IE_Show(float duration)
+        {
+            Group.alpha = 0;
+            while (Group.alpha < 1)
+            {
+                Group.alpha = Mathf.MoveTowards(Group.alpha, 1, Time.unscaledDeltaTime / duration);
+
+                yield return new WaitForEndOfFrame();
+            }
+            OnShow();
         }
 
-        canvasGroup.alpha = 1f;
-    }
-
-    private IEnumerator FadeOutPopup()
-    {
-        float timeElapsed = 0f;
-
-        canvasGroup.alpha = 1f;
-        while (timeElapsed < fadeDuration)
+        public virtual void Show(float duration = 0.5f)
         {
-            canvasGroup.alpha = Mathf.Lerp(1f, 0f, timeElapsed / fadeDuration);
-            timeElapsed += Time.deltaTime;
-            yield return null;
+            gameObject.SetActive(true);
+            if (duration > 0)
+                StartCoroutine(IE_Show(duration));
+            else
+            {
+                OnShow();
+            }
         }
 
-        canvasGroup.alpha = 0f;
-        GameObjectExtension.ActiveObj(gameObject, false);
+        IEnumerator IE_Hide()
+        {
+            while (Group.alpha > 0)
+            {
+                Group.alpha = Mathf.MoveTowards(Group.alpha, 0, Time.unscaledDeltaTime * 10);
+
+                yield return new WaitForEndOfFrame();
+            }
+            OnHide();
+        }
+        [Button]
+        public virtual void OnHide()
+        {
+            Group.alpha = 0;
+            Group.blocksRaycasts = false;
+            gameObject.SetActive(false);
+        }
+
+        public virtual void Hide()
+        {
+            if (!gameObject.activeSelf)
+            {
+                OnHide();
+            }
+            else
+            {
+                StartCoroutine(IE_Hide());
+            }
+        }
     }
 }
