@@ -58,10 +58,10 @@ namespace MJGame
             scrollPosition = EditorGUILayout.BeginScrollView(scrollPosition);
 
             SerializedObject serializedConfig = new SerializedObject(panelConfig);
-            SerializedProperty panel = serializedConfig.FindProperty("panel");
+            SerializedProperty panel = serializedConfig.FindProperty("Panels");
 
             // Display list of pool items
-            EditorGUILayout.PropertyField(panel, new GUIContent("Panel"), true);
+            EditorGUILayout.PropertyField(panel, new GUIContent("Panels"), true);
 
             serializedConfig.ApplyModifiedProperties();
 
