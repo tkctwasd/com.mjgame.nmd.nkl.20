@@ -6,12 +6,13 @@ using UnityEngine;
 namespace MJGame
 {
     [Serializable]
-    public class DataGameProfile
+    public partial class DataGameProfile
     {
-        public string packageName = "com.mjgame.nmd.nkl.20.vs-1.0.8";
         public float volume = 1f;
         public int level = 1;
         public int coin = 100;
+        public int gem = 10;
+        public string packageName = "com.mjgame.nmd.nkl.20.vs-1.0.9";
         public DataGameProfile()
         {
         }

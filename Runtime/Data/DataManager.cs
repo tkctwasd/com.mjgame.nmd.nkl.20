@@ -5,14 +5,14 @@ using System;
 
 namespace MJGame
 {
-    public class DataManager
+    public partial class DataManager
     {
         public static DataGameUtility DataGameUtility { get; private set; }
 
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
         protected static void OnInit()
         {
-            DataGameUtility = new DataGameUtility("DataGameDefault");
+            DataGameUtility = new DataGameUtility("DataGame");
             Debug.Log("DataManager has been initialized and added to the scene.");
         }
     }

@@ -8,20 +8,15 @@ namespace MJGame
         [Button]
         public void VFX()
         {
-            AudioManager.Instance.PlayVFX("Reload");
+            AudioManager.Instance.PlayVFX("MonsterWarning");
         }
 
         [Button]
-        public void SFX1()
+        public void SFX()
         {
             AudioManager.Instance.PlaySFX("ClickButton");
         }
 
-        [Button]
-        public void SFX2()
-        {
-            AudioManager.Instance.PlaySFX("PlayerJump");
-        }
 
         [Button]
         public void BG1()
@@ -34,6 +29,8 @@ namespace MJGame
         {
             AudioManager.Instance.PlayBGMusic("Chapter2");
         }
+
+       
     }
 
 }

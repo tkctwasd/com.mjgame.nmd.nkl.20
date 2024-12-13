@@ -18,11 +18,16 @@ namespace MJGame
             gameObject.AddComponent<AudioSource>();
             audioSource = GetComponent<AudioSource>();
         }
+
+        public void SetVolume(float volume)
+        {
+            audioSource.volume = volume;
+        }
         public void Setup(ItemAudio item, string key)
         {
             this.key = key;
             audioSource.clip = item.clip;
-            audioSource.volume =  DataManager.DataGameUtility.Profile.volume;
+            audioSource.volume = DataManager.DataGameUtility.Profile.volume;
             audioSource.loop = item.loop;
             audioSource.Play();
             if (!item.loop)

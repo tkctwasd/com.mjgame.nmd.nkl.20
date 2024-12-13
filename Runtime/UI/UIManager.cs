@@ -52,7 +52,7 @@ namespace MJGame
         static void SpawnRoot()
         {
             if (CanvasUI != null) return;
-            Canvas = SpawnCanvas("CanvasUI", 1000);
+            Canvas = SpawnCanvas("CanvasUI", 50);
             CanvasUI = Canvas.gameObject;
             CanvasUI.AddComponent<GraphicRaycaster>();
             Object.DontDestroyOnLoad(CanvasUI);
@@ -220,6 +220,54 @@ namespace MJGame
             }
             return default;
         }
+        
+        /// <summary>
+        /// panel opacity
+        /// </summary>
+        /// <param name="opacity"></param>
+        /// <typeparam name="T"></typeparam>
+        public static void SetPanelOpacity<T>(float opacity) where T : BaseUI
+        {
+            string name = typeof(T).Name;
+
+            if (Panels != null && Panels.TryGetValue(name, out var panel))
+            {
+                var canvasGroup = panel.GetComponent<CanvasGroup>();
+                if (canvasGroup == null)
+                {
+                    canvasGroup = panel.gameObject.AddComponent<CanvasGroup>();
+                }
+                canvasGroup.alpha = Mathf.Clamp01(opacity);
+            }
+            else
+            {
+                Debug.LogWarning($"Panel {name} not found or not registered in UIManager.");
+            }
+        }
+
+        /// <summary>
+        /// all panels opacity
+        /// </summary>
+        /// <param name="opacity"></param>
+        public static void SetAllPanelsOpacity(float opacity)
+        {
+            if (Panels == null || Panels.Count == 0)
+            {
+                Debug.LogWarning("No panels are registered in UIManager.");
+                return;
+            }
+
+            foreach (var panel in Panels.Values)
+            {
+                var canvasGroup = panel.GetComponent<CanvasGroup>();
+                if (canvasGroup == null)
+                {
+                    canvasGroup = panel.gameObject.AddComponent<CanvasGroup>();
+                }
+                canvasGroup.alpha = Mathf.Clamp01(opacity);
+            }
+        }
+
     }
 
 }

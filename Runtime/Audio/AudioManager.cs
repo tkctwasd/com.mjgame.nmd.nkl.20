@@ -210,6 +210,20 @@ namespace MJGame
             }
         }
 
+        public void UpdateAllAudioVolumes()
+        {
+            foreach (var poolEntry in audioPools)
+            {
+                Pool<AudioPool> pool = poolEntry.Value;
+                foreach (AudioPool audioPool in pool)
+                {
+                    if (audioPool != null && audioPool.audioSource != null)
+                    {
+                        audioPool.SetVolume(DataManager.DataGameUtility.Profile.volume);
+                    }
+                }
+            }
+        }
     }
 
     [Serializable]

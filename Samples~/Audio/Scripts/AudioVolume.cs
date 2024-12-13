@@ -22,6 +22,7 @@ namespace MJGame
         public void ChangeVolume(float volume)
         {
             DataManager.DataGameUtility.Profile.volume = CalculateVolume(volume);
+            SingletonComponent<AudioManager>.Instance.UpdateAllAudioVolumes();
         }
 
         #region Calculate Volume

@@ -1,9 +1,7 @@
 {
     "name": "MJGame.Runtime",
     "rootNamespace": "",
-    "references": [
-        "GUID:524ba701c77556048a7477b8b0d377b7"
-    ],
+    "references": [],
     "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": false,
