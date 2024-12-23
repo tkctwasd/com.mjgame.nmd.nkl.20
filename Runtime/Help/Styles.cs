@@ -3,11 +3,12 @@ using UnityEngine;
 
 public enum Size
 {
-    small,
-    medium,
-    big,
-    max,
+    Small,
+    Medium,
+    Big,
+    Max,
 }
+
 public enum BaseColor
 {
     White, Black, Yellow, Red, Blue, Green
@@ -35,6 +36,15 @@ public enum FixedColor
     Purple,
     Red,
     Yellow,
+    Primary,
+    Secondary,
+    Success,
+    Info,
+    Warning,
+    Danger,
+    Light,
+    Teal,
+    Pink,
     /// <summary> Color(0, 0, 0, 0) </summary>
     Transparent,
 }
@@ -84,13 +94,13 @@ public enum InspectorIcon
     Lock,
     Lightbaking,
     Lightbaking_Off,
-    Server_connected,
-    Server_disabled,
-    Server_disconnected,
+    Server_Connected,
+    Server_Disabled,
+    Server_Disconnected,
     Cross,
     Cloud,
     Picker,
-    Info_console,
+    Info_Console,
     Info_Inactive,
     Script,
     CustomSorting,
@@ -99,16 +109,16 @@ public enum InspectorIcon
     DebuggerDisabled,
     DebuggerEnabled,
     DefaultAsset,
-    Edit_collision,
-    Edit_constraints,
+    Edit_Collision,
+    Edit_Constraints,
     Exposure,
     Favorite,
-    Filter_by_label,
-    Filter_by_type,
+    Filter_By_Label,
+    Filter_By_Type,
     Folder,
-    Folder_favorite,
-    Folder_opened,
-    Frame_capture,
+    Folder_Favorite,
+    Folder_Opened,
+    Frame_Capture,
     GameObject,
     Gizmos,
     GridAndSnap,
@@ -123,11 +133,11 @@ public enum InspectorIcon
     MoreOptions,
     Move,
     Minus,
-    Minus_filled,
-    Minus_act,
+    Minus_Filled,
+    Minus_Act,
     Plus,
-    Plus_filled,
-    Plus_act,
+    Plus_Filled,
+    Plus_Act,
     Orientation,
     PackageManager,
     Pause,
@@ -142,21 +152,21 @@ public enum InspectorIcon
     Scale,
     Scene,
     pickable,
-    not_pickable,
-    pickable_mixed,
-    not_pickable_mixed,
+    Not_Pickable,
+    Pickable_Mixed,
+    Not_Pickable_Mixed,
     _2D,
     Sound,
-    Sound_off,
-    Sound_muted,
+    Sound_Off,
+    Sound_Muted,
     SceneCamera,
     SceneView,
     Lighting_Off,
     Snap,
     ScriptableObject,
     Search,
-    Search_menu,
-    Search_jump,
+    Search_Menu,
+    Search_Jump,
     Shaded,
     ShadedWireframe,
     Shortcut,
@@ -182,20 +192,20 @@ public enum InspectorIcon
     Wireframe,
     Light,
     Download,
-    Lock_opened,
-    Ticked_green,
-    Lens_flare,
-    Light_probe,
+    Lock_Opened,
+    Ticked_Green,
+    Lens_Flare,
+    Light_Probe,
     Package,
-    Particle_system,
-    Force_field,
+    Particle_System,
+    Force_Field,
     PointLight,
     Reflection_Probe,
     Refresh,
     SpotLight,
     Unity,
     Update,
-    Visual_effect,
+    Visual_Effect,
     WindZone
 }
 public static class StylesConvert
@@ -207,23 +217,42 @@ public static class StylesConvert
             FixedColor.CloudWhite => new Color(.93f, .93f, .93f, 1),
             FixedColor.IceWhite => Color.white,
             FixedColor.Black => Color.black,
-            FixedColor.Gray => Color.gray,
-            FixedColor.DarkGray => new Color(.1f, .1f, .1f, 1),
+            FixedColor.Gray => new Color(0.42f, 0.46f, 0.49f),
+            FixedColor.DarkGray => new Color(0.2f, 0.23f, 0.25f),
             FixedColor.Blue => Color.blue,
             FixedColor.PressedBlue => new Color(.27f, .38f, .49f) * 2.5f,
             FixedColor.BabyBlue => new Color(.73f, .89f, .96f, 1),
             FixedColor.DustyBlue => new Color(.31f, .4f, .5f, 1),
-            FixedColor.Purple => new Color(.44f, .13f, .51f, 1),
-            FixedColor.Red => Color.red,
+            FixedColor.Purple => new Color(0.44f, 0.26f, 0.76f),
+            FixedColor.Red => new Color(0.86f, 0.21f, 0.27f),
             FixedColor.CherryRed => new Color(.8f, 0, .1f, 1),
             FixedColor.Orange => new Color(.95f, .55f, .09f, 1),
-            FixedColor.Cyan => Color.cyan,
-            FixedColor.Green => Color.green,
+            FixedColor.Cyan => new Color(0.09f, 0.64f, 0.72f),
+            FixedColor.Green => new Color(0.16f, 0.65f, 0.27f),
             FixedColor.Magenta => Color.magenta,
-            FixedColor.Yellow => Color.yellow,
+            FixedColor.Yellow => new Color(1, 0.76f, 0.03f),
             FixedColor.Transparent => new Color(0f, 0f, 0f, 0f),
+            FixedColor.Pink => new Color(0.91f, 0.24f, 0.55f),
+            FixedColor.Teal => new Color(0.13f, 0.79f, 0.59f),
+            FixedColor.Primary => new Color(0, 0.48f, 1),
+            FixedColor.Secondary => new Color(0.42f, 0.46f, 0.49f),
+            FixedColor.Success => new Color(0.16f, 0.65f, 0.27f),
+            FixedColor.Info => new Color(0.09f, 0.64f, 0.72f),
+            FixedColor.Warning => new Color(1, 0.76f, 0.03f),
+            FixedColor.Danger => new Color(0.86f, 0.21f, 0.27f),
+            FixedColor.Light => new Color(0.97f, 0.98f, 0.98f),
             _ => throw new System.NotImplementedException($"{c} currently not supported")
         };
+    }
+
+    public static string ToHex(this FixedColor fixedColor)
+    {
+        Color color = fixedColor.ToColor();
+        color.r = Mathf.Clamp01(color.r);
+        color.g = Mathf.Clamp01(color.g);
+        color.b = Mathf.Clamp01(color.b);
+
+        return $"#{ColorUtility.ToHtmlStringRGB(color)}";
     }
     public static TextAnchor AlignmentToAnchor(TextAlignment textAlignment)
     {
@@ -235,14 +264,14 @@ public static class StylesConvert
             _ => throw new NotImplementedException(textAlignment.ToString()),
         };
     }
-    public static InternalStyles ToInteralStyle(this LabelStyle labelStyle)
+    public static LabelStyle ToInteralStyle(this LabelStyle labelStyle)
     {
         return labelStyle switch
         {
-            LabelStyle.NoLabel => InternalStyles.NoLabel,
-            LabelStyle.EmptyLabel => InternalStyles.EmptyLabel,
-            LabelStyle.NoSpacing => InternalStyles.NoSpacing,
-            LabelStyle.FullSpacing => InternalStyles.FullSpacing,
+            LabelStyle.NoLabel => LabelStyle.NoLabel,
+            LabelStyle.EmptyLabel => LabelStyle.EmptyLabel,
+            LabelStyle.NoSpacing => LabelStyle.NoSpacing,
+            LabelStyle.FullSpacing => LabelStyle.FullSpacing,
             _ => throw new NotImplementedException($"{labelStyle} not found"),
         };
     }
@@ -268,9 +297,9 @@ public static class StylesConvert
             nameof(InspectorIcon.Lock) => "d_AssemblyLock",
             nameof(InspectorIcon.Lightbaking) => "d_AutoLightbakingOn",
             nameof(InspectorIcon.Lightbaking_Off) => "d_AutoLightbakingOff",
-            nameof(InspectorIcon.Server_connected) => "d_CacheServerConnected",
-            nameof(InspectorIcon.Server_disabled) => "d_CacheServerDisabled",
-            nameof(InspectorIcon.Server_disconnected) => "d_CacheServerDisconnected",
+            nameof(InspectorIcon.Server_Connected) => "d_CacheServerConnected",
+            nameof(InspectorIcon.Server_Disabled) => "d_CacheServerDisabled",
+            nameof(InspectorIcon.Server_Disconnected) => "d_CacheServerDisconnected",
             nameof(InspectorIcon.Cross) => "d_clear",
             nameof(InspectorIcon.Cloud) => "d_CloudConnect",
             nameof(InspectorIcon.Picker) => "d_color_picker",
@@ -281,16 +310,16 @@ public static class StylesConvert
             nameof(InspectorIcon.DebuggerDisabled) => "d_DebuggerDisabled",
             nameof(InspectorIcon.DebuggerEnabled) => "d_DebuggerEnabled",
             nameof(InspectorIcon.DefaultAsset) => "d_DefaultAsset Icon",
-            nameof(InspectorIcon.Edit_collision) => "d_editcollision_16",
-            nameof(InspectorIcon.Edit_constraints) => "d_editconstraints_16",
+            nameof(InspectorIcon.Edit_Collision) => "d_editcollision_16",
+            nameof(InspectorIcon.Edit_Constraints) => "d_editconstraints_16",
             nameof(InspectorIcon.Exposure) => "d_Exposure",
             nameof(InspectorIcon.Favorite) => "d_Favorite",
-            nameof(InspectorIcon.Filter_by_label) => "d_FilterByLabel",
-            nameof(InspectorIcon.Filter_by_type) => "d_FilterByType",
+            nameof(InspectorIcon.Filter_By_Label) => "d_FilterByLabel",
+            nameof(InspectorIcon.Filter_By_Type) => "d_FilterByType",
             nameof(InspectorIcon.Folder) => "d_Folder Icon",
-            nameof(InspectorIcon.Folder_favorite) => "d_FolderFavorite Icon",
-            nameof(InspectorIcon.Folder_opened) => "d_FolderOpened Icon",
-            nameof(InspectorIcon.Frame_capture) => "d_FrameCapture",
+            nameof(InspectorIcon.Folder_Favorite) => "d_FolderFavorite Icon",
+            nameof(InspectorIcon.Folder_Opened) => "d_FolderOpened Icon",
+            nameof(InspectorIcon.Frame_Capture) => "d_FrameCapture",
             nameof(InspectorIcon.GameObject) => "d_GameObject Icon",
             nameof(InspectorIcon.Gizmos) => "d_GizmosToggle",
             nameof(InspectorIcon.GridAndSnap) => "d_GridAndSnap",
@@ -305,11 +334,11 @@ public static class StylesConvert
             nameof(InspectorIcon.MoreOptions) => "d_MoreOptions",
             nameof(InspectorIcon.Move) => "d_MoveTool on",
             nameof(InspectorIcon.Minus) => "d_Toolbar Minus",
-            nameof(InspectorIcon.Minus_filled) => "d_ol_minus",
-            nameof(InspectorIcon.Minus_act) => "d_ol_minus_act",
+            nameof(InspectorIcon.Minus_Filled) => "d_ol_minus",
+            nameof(InspectorIcon.Minus_Act) => "d_ol_minus_act",
             nameof(InspectorIcon.Plus) => "d_Toolbar Plus",
-            nameof(InspectorIcon.Plus_filled) => "d_ol_plus",
-            nameof(InspectorIcon.Plus_act) => "d_ol_plus_act",
+            nameof(InspectorIcon.Plus_Filled) => "d_ol_plus",
+            nameof(InspectorIcon.Plus_Act) => "d_ol_plus_act",
             nameof(InspectorIcon.Orientation) => "d_OrientationGizmo",
             nameof(InspectorIcon.PackageManager) => "d_Package Manager",
             nameof(InspectorIcon.Pause) => "d_PauseButton On",
@@ -324,20 +353,20 @@ public static class StylesConvert
             nameof(InspectorIcon.Scale) => "d_ScaleTool On",
             nameof(InspectorIcon.Scene) => "d_Scene",
             nameof(InspectorIcon.pickable) => "d_scenepicking_pickable_hover",
-            nameof(InspectorIcon.not_pickable) => "d_scenepicking_notpickable_hover",
-            nameof(InspectorIcon.pickable_mixed) => "d_scenepicking_pickable-mixed_hover",
-            nameof(InspectorIcon.not_pickable_mixed) => "d_scenepicking_notpickable-mixed_hover",
+            nameof(InspectorIcon.Not_Pickable) => "d_scenepicking_notpickable_hover",
+            nameof(InspectorIcon.Pickable_Mixed) => "d_scenepicking_pickable-mixed_hover",
+            nameof(InspectorIcon.Not_Pickable_Mixed) => "d_scenepicking_notpickable-mixed_hover",
             nameof(InspectorIcon._2D) => "d_SceneView2D On",
             nameof(InspectorIcon.Sound) => "d_SceneViewAudio On",
-            nameof(InspectorIcon.Sound_off) => "AudioSource Gizmo",
-            nameof(InspectorIcon.Sound_muted) => "d_SceneViewAudio",
+            nameof(InspectorIcon.Sound_Off) => "AudioSource Gizmo",
+            nameof(InspectorIcon.Sound_Muted) => "d_SceneViewAudio",
             nameof(InspectorIcon.SceneView) => "d_SceneViewCamera",
             nameof(InspectorIcon.Lighting_Off) => "d_SceneViewLighting",
             nameof(InspectorIcon.Snap) => "d_SceneViewSnap",
             nameof(InspectorIcon.ScriptableObject) => "d_ScriptableObject Icon",
             nameof(InspectorIcon.Search) => "d_search_icon",
-            nameof(InspectorIcon.Search_menu) => "d_search_menu",
-            nameof(InspectorIcon.Search_jump) => "d_SearchJump Icon",
+            nameof(InspectorIcon.Search_Menu) => "d_search_menu",
+            nameof(InspectorIcon.Search_Jump) => "d_SearchJump Icon",
             nameof(InspectorIcon.Shaded) => "d_Shaded",
             nameof(InspectorIcon.ShadedWireframe) => "d_ShadedWireframe",
             nameof(InspectorIcon.Shortcut) => "d_Shortcut Icon",
@@ -363,19 +392,19 @@ public static class StylesConvert
             nameof(InspectorIcon.Wireframe) => "d_wireframe",
             nameof(InspectorIcon.Light) => "DiscLight Gizmo",
             nameof(InspectorIcon.Download) => "Download-Available",
-            nameof(InspectorIcon.Ticked_green) => "Installed",
-            nameof(InspectorIcon.Lens_flare) => "LensFlare Gizmo",
-            nameof(InspectorIcon.Light_probe) => "LightProbeGroup Gizmo",
+            nameof(InspectorIcon.Ticked_Green) => "Installed",
+            nameof(InspectorIcon.Lens_Flare) => "LensFlare Gizmo",
+            nameof(InspectorIcon.Light_Probe) => "LightProbeGroup Gizmo",
             nameof(InspectorIcon.Package) => "package_installed",
-            nameof(InspectorIcon.Particle_system) => "ParticleSystem Gizmo",
-            nameof(InspectorIcon.Force_field) => "ParticleSystemForceField Gizmo",
+            nameof(InspectorIcon.Particle_System) => "ParticleSystem Gizmo",
+            nameof(InspectorIcon.Force_Field) => "ParticleSystemForceField Gizmo",
             nameof(InspectorIcon.PointLight) => "PointLight Gizmo",
             nameof(InspectorIcon.Reflection_Probe) => "ReflectionProbe Gizmo",
             nameof(InspectorIcon.Refresh) => "Refresh",
             nameof(InspectorIcon.SpotLight) => "SpotLight Gizmo",
             nameof(InspectorIcon.Unity) => "d_Scene",
             nameof(InspectorIcon.Update) => "Update-Available",
-            nameof(InspectorIcon.Visual_effect) => "VisualEffect Gizmo",
+            nameof(InspectorIcon.Visual_Effect) => "VisualEffect Gizmo",
             nameof(InspectorIcon.WindZone) => "WindZone Gizmo",
             _ => iconName,
         };
@@ -385,10 +414,10 @@ public static class StylesConvert
     {
         return size switch
         {
-            Size.small => 17,
-            Size.medium => 30,
-            Size.big => 40,
-            Size.max => 60,
+            Size.Small => 17,
+            Size.Medium => 30,
+            Size.Big => 40,
+            Size.Max => 60,
 
             _ => throw new System.NotImplementedException(size.ToString()),
         };
@@ -397,11 +426,38 @@ public static class StylesConvert
     {
         return Mathf.Min(availableWidth, Math.Max(GUI.skin.label.CalcSize(buttonLabel).x + 20, size switch
         {
-            Size.small => 100,
-            Size.medium => 50 + availableWidth / 4,
-            Size.big => 50 + availableWidth / 2,
-            Size.max => float.MaxValue,
+            Size.Small => 100,
+            Size.Medium => 50 + availableWidth / 4,
+            Size.Big => 50 + availableWidth / 2,
+            Size.Max => float.MaxValue,
             _ => throw new System.NotImplementedException(size.ToString()),
         }));
     }
+}
+
+
+public static class GameColor
+{
+
+    public static Color Blue => new Color(0, 0.48f, 1);
+    public static Color Indigo => new Color(0.4f, 0.06f, 0.95f);
+    public static Color Purple => new Color(0.44f, 0.26f, 0.76f);
+    public static Color Pink => new Color(0.91f, 0.24f, 0.55f);
+    public static Color Red => new Color(0.86f, 0.21f, 0.27f);
+    public static Color Orange => new Color(0.99f, 0.49f, 0.08f);
+    public static Color Yellow => new Color(1, 0.76f, 0.03f);
+    public static Color Green => new Color(0.16f, 0.65f, 0.27f);
+    public static Color Teal => new Color(0.13f, 0.79f, 0.59f);
+    public static Color Cyan => new Color(0.09f, 0.64f, 0.72f);
+    public static Color White => Color.white;
+    public static Color Gray => new Color(0.42f, 0.46f, 0.49f);
+    public static Color GrayDark => new Color(0.2f, 0.23f, 0.25f);
+    public static Color Primary => new Color(0, 0.48f, 1);
+    public static Color Secondary => new Color(0.42f, 0.46f, 0.49f);
+    public static Color Success => new Color(0.16f, 0.65f, 0.27f);
+    public static Color Info => new Color(0.09f, 0.64f, 0.72f);
+    public static Color Warning => new Color(1, 0.76f, 0.03f);
+    public static Color Danger => new Color(0.86f, 0.21f, 0.27f);
+    public static Color Light => new Color(0.97f, 0.98f, 0.98f);
+    public static Color Dark => new Color(0.2f, 0.23f, 0.25f);
 }

@@ -1,84 +1,91 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class CameraZoomAction : TickBehaviour, IPointerDownHandler, IPointerUpHandler
+namespace MJGame
 {
-    public Camera cameraToZoom;
-    public float zoomSpeed = 2f;
-    public float maxZoom = 2f;
-    public float minZoom = 10f;
-    public float smoothTime = 0.025f;
-    private bool isZoomingIn = false;
-    private bool isZoomingOut = false;
-    private float targetZoom;
-    private float zoomVelocity = 0.0f;
 
-    private void Start()
+    public class CameraZoomAction : TickBehaviour, IPointerDownHandler, IPointerUpHandler
     {
-        targetZoom = cameraToZoom.orthographicSize;
-    }
+        public Camera cameraToZoom;
+        public float zoomSpeed = 2f;
+        public float maxZoom = 2f;
+        public float minZoom = 10f;
+        public float smoothTime = 0.025f;
+        private bool isZoomingIn = false;
+        private bool isZoomingOut = false;
+        private float targetZoom;
+        private float zoomVelocity = 0.0f;
 
-    public override void OnUpdate()
-    {
-        base.OnUpdate();
-        if (isZoomingIn)
+        private void Start()
         {
-            ZoomIn();
-        }
-        else if (isZoomingOut)
-        {
-            ZoomOut();
+            targetZoom = cameraToZoom.orthographicSize;
         }
 
-        cameraToZoom.orthographicSize = Mathf.SmoothDamp(
-            cameraToZoom.orthographicSize,
-            targetZoom,
-            ref zoomVelocity,
-           smoothTime
-        );
-    }
-
-    public bool isOut = false;
-    public void OnPointerDown(PointerEventData eventData)
-    {
-        if (isOut)
+        public override void OnUpdate()
         {
-            StartZoomIn();
+            base.OnUpdate();
+            if (isZoomingIn)
+            {
+                ZoomIn();
+            }
+            else if (isZoomingOut)
+            {
+                ZoomOut();
+            }
+
+            cameraToZoom.orthographicSize = Mathf.SmoothDamp(
+                cameraToZoom.orthographicSize,
+                targetZoom,
+                ref zoomVelocity,
+               smoothTime
+            );
         }
-        else
+
+        public bool isOut = false;
+        public void OnPointerDown(PointerEventData eventData)
         {
-            StartZoomOut();
+            if (isOut)
+            {
+                StartZoomIn();
+            }
+            else
+            {
+                StartZoomOut();
+            }
+
         }
 
+        public void OnPointerUp(PointerEventData eventData)
+        {
+            isZoomingIn = false;
+            isZoomingOut = false;
+        }
+
+        [Button]
+        public void StartZoomIn()
+        {
+            isZoomingIn = true;
+            isZoomingOut = false;
+        }
+
+        [Button]
+        public void StartZoomOut()
+        {
+            isZoomingOut = true;
+            isZoomingIn = false;
+        }
+
+        private void ZoomIn()
+        {
+            targetZoom -= zoomSpeed * Time.deltaTime;
+            targetZoom = Mathf.Clamp(targetZoom, maxZoom, minZoom);
+        }
+
+        private void ZoomOut()
+        {
+            targetZoom += zoomSpeed * Time.deltaTime;
+            targetZoom = Mathf.Clamp(targetZoom, maxZoom, minZoom);
+        }
     }
 
-    public void OnPointerUp(PointerEventData eventData)
-    {
-        isZoomingIn = false;
-        isZoomingOut = false;
-    }
-
-    public void StartZoomIn()
-    {
-        isZoomingIn = true;
-        isZoomingOut = false;
-    }
-
-    public void StartZoomOut()
-    {
-        isZoomingOut = true;
-        isZoomingIn = false;
-    }
-
-    private void ZoomIn()
-    {
-        targetZoom -= zoomSpeed * Time.deltaTime;
-        targetZoom = Mathf.Clamp(targetZoom, maxZoom, minZoom);
-    }
-
-    private void ZoomOut()
-    {
-        targetZoom += zoomSpeed * Time.deltaTime;
-        targetZoom = Mathf.Clamp(targetZoom, maxZoom, minZoom);
-    }
 }

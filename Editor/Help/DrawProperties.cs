@@ -146,19 +146,19 @@ public static class DrawProperties
             };
         }
     }
-    public static void DrawLabelSettings(Rect position, SerializedProperty property, GUIContent label, InternalStyles style)
+    public static void DrawLabelSettings(Rect position, SerializedProperty property, GUIContent label, LabelStyle style)
     {
         switch (style)
         {
-            case InternalStyles.NoLabel:
+            case LabelStyle.NoLabel:
                 DrawProperties.PropertyFieldWithoutLabel(position, property, true);
                 break;
 
-            case InternalStyles.EmptyLabel:
+            case LabelStyle.EmptyLabel:
                 DrawProperties.PropertyField(position, new GUIContent(" "), property, true);
                 break;
 
-            case InternalStyles.NoSpacing:
+            case LabelStyle.NoSpacing:
                 if (property.propertyType == SerializedPropertyType.Generic)
                 {
                     DrawProperties.PropertyField(position, label, property, true);
@@ -174,7 +174,7 @@ public static class DrawProperties
                 }
                 break;
 
-            case InternalStyles.FullSpacing:
+            case LabelStyle.FullSpacing:
                 DrawProperties.PropertyField(position, label, property, true);
                 break;
             default:

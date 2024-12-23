@@ -1,16 +1,16 @@
 {
     "name": "com.mjgame.nmd.nkl.20",
-    "version": "1.0.10",
+    "version": "1.0.11",
     "displayName": "MJGame",
     "description": "MJGame is a package developed by nmd.nkl to enhance Unity game development, particularly for 2D games. It includes a collection of essential, reusable code snippets designed to accelerate workflows and simplify the development process.",
     "unity": "2021.3",
     "release": {
-        "version": "1.0.10",
-        "notes": "Added new samples and updated dependencies.",
+        "version": "1.0.11",
+        "notes": "Fixed folder, LogExtension",
         "newFeatures": [
             "release"
         ],
-        "date": "2024-12-13 17:58:23"
+        "date": "2024-12-23 11:58:23"
     },
     "dependencies": {
         "com.unity.textmeshpro": "3.0.9"

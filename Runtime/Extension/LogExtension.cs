@@ -1,13 +1,15 @@
+using System;
+
 public static class LogExtension
 {
-    private static readonly string[] DefaultColors = { "yellow", "cyan", "red", "orange", "white", "green", "purple", "pink" };
+
     /// <summary>
     /// Colorize a message with a specific color
     /// </summary>
     /// <param name="message"></param>
     /// <param name="color"></param>
     /// <returns></returns>
-    public static string Color(this string message, string color = "yellow")
+    public static string Color(this string message, FixedColor color = FixedColor.Yellow)
     {
         return new[] { message }.Color(color);
     }
@@ -15,11 +17,10 @@ public static class LogExtension
     /// <summary>
     /// Colorize a message with multiple colors
     /// </summary>
-    /// <param name="string"></param>
     /// <param name="tuple"></param>
     /// <param name="colors"></param>
     /// <returns></returns>
-    public static string Color(this (string, string) tuple, params string[] colors)
+    public static string Color(this (string, string) tuple, params FixedColor[] colors)
     {
         return new[] { tuple.Item1, tuple.Item2 }.Color(colors);
     }
@@ -27,11 +28,10 @@ public static class LogExtension
     /// <summary>
     /// Colorize a message with multiple colors
     /// </summary>
-    /// <param name="string"></param>
     /// <param name="tuple"></param>
     /// <param name="colors"></param>
     /// <returns></returns>
-    public static string Color(this (string, string, string) tuple, params string[] colors)
+    public static string Color(this (string, string, string) tuple, params FixedColor[] colors)
     {
         return new[] { tuple.Item1, tuple.Item2, tuple.Item3 }.Color(colors);
     }
@@ -42,18 +42,20 @@ public static class LogExtension
     /// <param name="messages"></param>
     /// <param name="colors"></param>
     /// <returns></returns>
-    public static string Color(this string[] messages, params string[] colors)
+    public static string Color(this string[] messages, params FixedColor[] colors)
     {
-        if (colors.Length == 0)
-        {
-            colors = DefaultColors;
-        }
-
         string formattedMessage = "";
-        for (int i = 0; i < messages.Length; i++)
+        int min = Math.Min(messages.Length, colors.Length);
+        for (int i = 0; i < min; i++)
         {
-            string color = colors[i % colors.Length];
-            formattedMessage += $"<color={color}>| {messages[i]} | </color> ";
+            string hexColor = colors[i].ToHex();
+            formattedMessage += $"<color={hexColor}>| {messages[i]} | </color> ";
+        }
+        while (min < messages.Length)
+        {
+            string hexColor = FixedColor.Yellow.ToHex();
+            formattedMessage += $"<color={hexColor}>| {messages[min]} | </color> ";
+            min++;
         }
 
         return formattedMessage.Trim();

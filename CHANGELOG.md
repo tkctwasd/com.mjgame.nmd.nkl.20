@@ -48,3 +48,9 @@
 - `Audio`
 - `UI`
 - `Sample~`
+
+---
+> **[1.0.11] - 2024-12-23**
+##### **Fixed**
+- `Folder`
+-  `LogExtension`
