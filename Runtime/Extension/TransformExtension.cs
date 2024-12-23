@@ -685,6 +685,22 @@ namespace MJGame
             return children;
         }
 
+        public static List<T> ListChildren<T>(this Transform transform) where T : Component
+        {
+            List<T> list = new List<T>();
+            for (int i = 0; i < transform.childCount; i++)
+            {
+                Transform child = transform.GetChild(i);
+                T component = child.GetComponent<T>();
+                if (component != null) 
+                {
+                    list.Add(component);
+                }
+            }
+
+            return list;
+        }
+
         public static void Sort(this Transform transform, Func<Transform, IComparable> sortFunction)
         {
             var children = transform.ListChildren();
