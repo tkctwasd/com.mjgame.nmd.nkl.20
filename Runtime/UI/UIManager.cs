@@ -116,7 +116,8 @@ namespace MJGame
             foreach (var panel in Panels)
             {
                 PrevUI = null;
-                panel.Value.gameObject.SetActive(false);
+                // panel.Value.gameObject.SetActive(false);
+                panel.Value.Hide();
             }
         }
         /// <summary>
@@ -133,7 +134,8 @@ namespace MJGame
             if (Panels.TryGetValue(name, out var panel))
             {
                 PrevUI = panel;
-                panel.gameObject.SetActive(false);
+                // panel.gameObject.SetActive(false);
+                panel.Hide();
                 if (panel.transform.parent == null)
                 {
                     panel.transform.SetParent(CanvasUI.transform, false);

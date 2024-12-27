@@ -54,3 +54,8 @@
 ##### **Fixed**
 - `Folder`
 -  `LogExtension`
+
+---
+> **[1.0.12] - 2024-12-27**
+##### **Fixed**
+-  `UIManager`
