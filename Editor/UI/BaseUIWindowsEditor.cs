@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+#if UNITY_EDITOR
+
+using UnityEngine;
 using UnityEditor;
 using UnityEngine.UI;
 using System.IO;
@@ -121,3 +123,4 @@ namespace MJGame
     }
 
 }
+#endif

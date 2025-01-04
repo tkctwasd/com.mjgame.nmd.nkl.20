@@ -1,4 +1,6 @@
-﻿using System.Reflection;
+#if UNITY_EDITOR
+
+using System.Reflection;
 using UnityEditor;
 using UnityEngine;
 namespace MJGame {
@@ -54,3 +56,4 @@ public class StaticFieldEditor : Editor
     }
 }
 }
+#endif

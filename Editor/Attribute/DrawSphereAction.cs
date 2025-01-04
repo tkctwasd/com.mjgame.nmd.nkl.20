@@ -1,4 +1,6 @@
-﻿using UnityEditor;
+#if UNITY_EDITOR
+
+using UnityEditor;
 using UnityEngine;
 
 namespace MJGame {
@@ -38,3 +40,4 @@ internal class DrawSphereAction : AttributeAction<DrawSphereAttribute>
     }
 }
 }
+#endif

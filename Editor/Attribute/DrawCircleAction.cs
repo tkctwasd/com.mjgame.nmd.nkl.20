@@ -1,4 +1,6 @@
-﻿using UnityEditor;
+#if UNITY_EDITOR
+
+using UnityEditor;
 using UnityEngine;
 namespace MJGame
 {
@@ -60,3 +62,4 @@ internal class DrawCircleAction : AttributeAction<DrawCircleAttribute>
     }
 }
 }
+#endif

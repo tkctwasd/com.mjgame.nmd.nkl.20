@@ -64,3 +64,8 @@
 > **[1.0.13] - 2024-12-28**
 ##### **Update**
 -  `DataGameProfile`
+
+---
+> **[1.0.14] - 2024-1-4**
+##### **Fixed**
+-  `Build game error folder editor`

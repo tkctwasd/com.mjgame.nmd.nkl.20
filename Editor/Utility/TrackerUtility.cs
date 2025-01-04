@@ -1,3 +1,5 @@
+#if UNITY_EDITOR
+
 using UnityEngine;
 using UnityEditor;
 using System;
@@ -148,3 +150,4 @@ internal static class TrackerUtility
         }
     }
 }
+#endif

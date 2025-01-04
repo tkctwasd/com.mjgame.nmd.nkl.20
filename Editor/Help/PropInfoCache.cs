@@ -1,3 +1,5 @@
+#if UNITY_EDITOR
+
 using System.Collections.Generic;
 using System.Reflection;
 using UnityEditor;
@@ -8,7 +10,7 @@ public class PropInfoCache<PropInfo> where PropInfo : ICachedPropInfo, new()
 {
     readonly Dictionary<PropertyIdentifier, PropInfo> infos = new();
 
-    public PropInfo GetInfo(SerializedProperty property, PropertyAttribute attribute, FieldInfo fieldInfo)
+    public PropInfo GetInfo(UnityEditor.SerializedProperty property, PropertyAttribute attribute, FieldInfo fieldInfo)
     {
         PropertyIdentifier id = new(property);
         if (!infos.TryGetValue(id, out PropInfo info))
@@ -43,3 +45,4 @@ public interface ICachedPropInfo
 }
 
 }
+#endif

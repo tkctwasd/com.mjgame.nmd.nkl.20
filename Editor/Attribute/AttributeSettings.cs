@@ -1,3 +1,5 @@
+#if UNITY_EDITOR
+
 using System.Collections.Generic;
 
 namespace MJGame {
@@ -37,3 +39,4 @@ public struct AttributeSettings
     }
 }
 }
+#endif

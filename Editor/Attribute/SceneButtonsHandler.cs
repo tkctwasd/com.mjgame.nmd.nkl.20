@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+#if UNITY_EDITOR
+
+using System.Collections.Generic;
 using System.Reflection;
 using System.Threading;
 using UnityEditor;
@@ -250,3 +252,4 @@ public class SceneButtonsHandler
     }
 }
 }
+#endif

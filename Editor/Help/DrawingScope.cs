@@ -1,3 +1,5 @@
+#if UNITY_EDITOR
+
 using System;
 using UnityEngine;
 using UnityEditor;
@@ -19,3 +21,4 @@ public struct DrawingScope : IDisposable
     }
 }
 }
+#endif

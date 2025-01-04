@@ -1,3 +1,5 @@
+#if UNITY_EDITOR
+
 using UnityEngine;
 using UnityEditor;
 using UnityEngine.UI;
@@ -37,3 +39,4 @@ public class ProgressPropertyDrawer : PropertyDrawer
     }
 }
 }
+#endif

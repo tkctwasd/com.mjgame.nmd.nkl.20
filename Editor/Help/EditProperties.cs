@@ -1,3 +1,5 @@
+#if UNITY_EDITOR
+
 using System;
 using System.Collections;
 using System.Reflection;
@@ -107,3 +109,4 @@ public static class EditProperties
     }
 }
 }
+#endif

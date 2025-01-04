@@ -1,4 +1,6 @@
-﻿using System.Reflection;
+#if UNITY_EDITOR
+
+using System.Reflection;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
@@ -112,3 +114,4 @@ public class AttributesHandler
     }
 }
 }
+#endif

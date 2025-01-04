@@ -1,3 +1,5 @@
+#if UNITY_EDITOR
+
 using System;
 using UnityEditor;
 namespace MJGame {
@@ -19,3 +21,4 @@ public class NewIndentLevel : IDisposable
     }
 }
 }
+#endif

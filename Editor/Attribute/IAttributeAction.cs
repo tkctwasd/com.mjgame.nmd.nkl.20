@@ -1,4 +1,6 @@
-﻿using System.Reflection;
+#if UNITY_EDITOR
+
+using System.Reflection;
 using UnityEditor;
 using UnityEngine;
 
@@ -15,3 +17,4 @@ namespace MJGame
             Transform transform, AttributeSettings settings);
     }
 }
+#endif
