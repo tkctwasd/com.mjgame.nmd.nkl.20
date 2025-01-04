@@ -42,7 +42,7 @@ namespace MJGame
 		private bool waitTillPlistHasBeenWritten = false;
 		private FileInfo tmpPlistFile;
 
-		private List<PlayerPrefsEntry> ppeList = new List<PlayerPrefsEntry>();
+		private List<PlayerPrefsEntry> ppeList = new();
 		private Vector2 scrollPos;
 		private string newKey = "";
 		private string newValueString = "";
@@ -60,7 +60,7 @@ namespace MJGame
 		private string _searchString = string.Empty;
 		private SearchFilterType _searchFilter = SearchFilterType.All;
 
-		private List<PlayerPrefsEntry> filteredPpeList = new List<PlayerPrefsEntry>();
+		private List<PlayerPrefsEntry> filteredPpeList = new();
 
 		private Texture2D _refreshIcon;
 		private Texture2D _deleteIcon;
@@ -147,10 +147,10 @@ namespace MJGame
 
 		void OnGUI()
 		{
-			GUIStyle boldNumberFieldStyle = new GUIStyle(EditorStyles.numberField);
+			GUIStyle boldNumberFieldStyle = new(EditorStyles.numberField);
 			boldNumberFieldStyle.font = EditorStyles.boldFont;
 
-			GUIStyle boldToggleStyle = new GUIStyle(EditorStyles.toggle);
+			GUIStyle boldToggleStyle = new(EditorStyles.toggle);
 			boldToggleStyle.font = EditorStyles.boldFont;
 
 			GUI.enabled = !waitTillPlistHasBeenWritten;
@@ -167,7 +167,7 @@ namespace MJGame
 
 				if (GUILayout.Button(new GUIContent("Options", "Contains additional functionality like \"Add new entry\" and \"Delete all entries\" "), EditorStyles.toolbarDropDown, GUILayout.ExpandWidth(false)))
 				{
-					GenericMenu options = new GenericMenu();
+					GenericMenu options = new();
 					options.AddItem(new GUIContent("New Entry..."), false, OnNewEntryClicked);
 					options.AddSeparator("");
 					options.AddItem(new GUIContent("Import..."), false, OnImport);
@@ -187,11 +187,11 @@ namespace MJGame
 				position.x += 16;
 				SearchString = GUI.TextField(position, SearchString, EditorStyles.toolbarTextField);
 
-				position.x = position.x - 18;
+				position.x = position.x - 20;
 				position.width = 20;
 				if (GUI.Button(position, "", ToolbarSeachTextFieldPopup))
 				{
-					GenericMenu options = new GenericMenu();
+					GenericMenu options = new();
 					options.AddItem(new GUIContent("All"), SearchFilter == SearchFilterType.All, OnSearchAllClicked);
 					options.AddItem(new GUIContent("Key"), SearchFilter == SearchFilterType.Key, OnSearchKeyClicked);
 					options.AddItem(new GUIContent("Value (Strings only)"), SearchFilter == SearchFilterType.Value, OnSearchValueClicked);
@@ -199,7 +199,7 @@ namespace MJGame
 				}
 
 				position = GUILayoutUtility.GetRect(10, 10, ToolbarSeachCancelButton);
-				position.x -= 5;
+				position.x -= 0;
 				if (GUI.Button(position, "", ToolbarSeachCancelButton))
 				{
 					SearchString = string.Empty;
@@ -213,7 +213,7 @@ namespace MJGame
 					AutoRefresh = GUILayout.Toggle(AutoRefresh, new GUIContent("Auto Refresh ", refreshTooltip), EditorStyles.toolbarButton, GUILayout.ExpandWidth(false), GUILayout.MinWidth(75));
 				}
 
-				if (GUILayout.Button(new GUIContent(RefreshIcon, "Force a refresh, could take a few seconds."), EditorStyles.toolbarButton, GUILayout.ExpandWidth(false), GUILayout.ExpandHeight(false)))
+				if (GUILayout.Button(new GUIContent("Refesh", "Force a refresh, could take a few seconds."), EditorStyles.toolbarButton, GUILayout.ExpandWidth(false), GUILayout.ExpandHeight(false)))
 				{
 					if (Application.platform == RuntimePlatform.OSXEditor)
 						waitTillPlistHasBeenWritten = IsUnityWritingToPlist();
@@ -364,12 +364,12 @@ namespace MJGame
 								GUILayout.Label(new GUIContent("?", filteredPpeList[i].Type.ToString()), GUILayout.ExpandWidth(false));
 
 								GUI.enabled = filteredPpeList[i].HasChanged && !waitTillPlistHasBeenWritten;
-								if (GUILayout.Button(new GUIContent(SaveIcon, "Save changes made to this value."), GUILayout.ExpandWidth(false)))
+								if (GUILayout.Button(new GUIContent("Save", "Save changes made to this value."), GUILayout.ExpandWidth(false)))
 								{
 									filteredPpeList[i].SaveChanges();
 									EditorGUI.FocusTextInControl(string.Empty);								}
 
-								if (GUILayout.Button(new GUIContent(UndoIcon, "Discard changes made to this value."), GUILayout.ExpandWidth(false)))
+								if (GUILayout.Button(new GUIContent("Undo", "Discard changes made to this value."), GUILayout.ExpandWidth(false)))
 								{
 									filteredPpeList[i].RevertChanges();
 									EditorGUI.FocusTextInControl(string.Empty);
@@ -377,7 +377,7 @@ namespace MJGame
 
 								GUI.enabled = !waitTillPlistHasBeenWritten;
 
-								if (GUILayout.Button(new GUIContent(DeleteIcon, "Delete this key-value."), GUILayout.ExpandWidth(false)))
+								if (GUILayout.Button(new GUIContent("Delete", "Delete this key-value."), GUILayout.ExpandWidth(false)))
 								{
 									PlayerPrefs.DeleteKey(filteredPpeList[i].Key);
 									ppeList.Remove(filteredPpeList[i]);
@@ -416,18 +416,18 @@ namespace MJGame
 			if (!string.IsNullOrEmpty(importPath))
 			{
 				FileInfo fi = new FileInfo(importPath);
-				Dictionary<string, object> plist = (Dictionary<string, object>)Plist.readPlist(fi.FullName);
+				Dictionary<string, object> plist = (Dictionary<string, object>)Plist.ReadPlist(fi.FullName);
 
 				foreach (KeyValuePair<string, object> kvp in plist)
 				{
 					PlayerPrefsEntry entry = null;
 
-					if (kvp.Value is float)
-						entry = new PlayerPrefsEntry(kvp.Key, (float)kvp.Value);
-					else if (kvp.Value is int)
-						entry = new PlayerPrefsEntry(kvp.Key, (int)kvp.Value);
-					else if (kvp.Value is string)
-						entry = new PlayerPrefsEntry(kvp.Key, (string)kvp.Value);
+					if (kvp.Value is float v)
+						entry = new PlayerPrefsEntry(kvp.Key, v);
+					else if (kvp.Value is int v1)
+						entry = new PlayerPrefsEntry(kvp.Key, v1);
+					else if (kvp.Value is string v2)
+						entry = new PlayerPrefsEntry(kvp.Key, v2);
 
 					if (entry != null)
 					{
@@ -504,7 +504,7 @@ namespace MJGame
 
 		private void Export(bool onlySelected)
 		{
-			Dictionary<string, object> entries = new Dictionary<string, object>();
+			Dictionary<string, object> entries = new();
 			for (int i = 0; i < filteredPpeList.Count; i++)
 			{
 				PlayerPrefsEntry entry = filteredPpeList[i];
@@ -531,7 +531,7 @@ namespace MJGame
 
 				if (!string.IsNullOrEmpty(exportPath))
 				{
-					string xml = Plist.writeXml(entries);
+					string xml = Plist.WriteXml(entries);
 					File.WriteAllText(exportPath, xml);
 					AssetDatabase.Refresh();
 				}
@@ -621,7 +621,7 @@ namespace MJGame
 
 		private string[] GetAllKeys()
 		{
-			List<string> result = new List<string>();
+			List<string> result = new();
 
 			if (Application.platform == RuntimePlatform.WindowsEditor)
 				result.AddRange(GetAllWindowsKeys());
@@ -657,7 +657,7 @@ namespace MJGame
 			if (File.Exists(plistPath))
 			{
 				FileInfo fi = new FileInfo(plistPath);
-				Dictionary<string, object> plist = (Dictionary<string, object>)Plist.readPlist(fi.FullName);
+				Dictionary<string, object> plist = (Dictionary<string, object>)Plist.ReadPlist(fi.FullName);
 
 				keys = new string[plist.Count];
 				plist.Keys.CopyTo(keys, 0);
@@ -702,7 +702,7 @@ namespace MJGame
 		private string[] GetAllLinuxKeys()
 		{
 			string path = Environment.GetFolderPath(Environment.SpecialFolder.Personal) + "/.config/unity3d/" + PlayerSettings.companyName + "/" + PlayerSettings.productName + "/prefs";
-			List<string> keys = new List<string>();
+			List<string> keys = new();
 
 			XmlDocument xmlDoc = new XmlDocument();
 			if (System.IO.File.Exists(path))
@@ -1019,10 +1019,10 @@ namespace MJGame
 					string path = AssetDatabase.GetAssetPath(MonoScript.FromScriptableObject(this));
 
 					//Strip PlayerPrefsEditor.cs
-					path = path.Substring(0, path.LastIndexOf('/'));
+					path = path[..path.LastIndexOf('/')];
 
 					//Strip Editor/
-					path = path.Substring(0, path.LastIndexOf('/') + 1);
+					path = path[..(path.LastIndexOf('/') + 1)];
 
 					iconsPath = path + "Icons/";
 				}

@@ -69,3 +69,9 @@
 > **[1.0.14] - 2024-1-4**
 ##### **Fixed**
 -  `Build game error folder editor`
+
+
+---
+> **[1.0.15] - 2024-1-4**
+##### **Add**
+-  `Add API`

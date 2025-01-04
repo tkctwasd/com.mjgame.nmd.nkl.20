@@ -18,53 +18,53 @@ namespace MJGame
 
         #region Public Functions
 
-        public static object readPlist(string path)
+        public static object ReadPlist(string path)
         {
             using (FileStream f = new FileStream(path, FileMode.Open, FileAccess.Read))
             {
-                return readPlist(f, plistType.Auto);
+                return ReadPlist(f, PlistType.Auto);
             }
         }
 
-        public static object readPlistSource(string source)
+        public static object ReadPlistSource(string source)
         {
-            return readPlist(System.Text.Encoding.UTF8.GetBytes(source));
+            return ReadPlist(System.Text.Encoding.UTF8.GetBytes(source));
         }
 
-        public static object readPlist(byte[] data)
+        public static object ReadPlist(byte[] data)
         {
-            return readPlist(new MemoryStream(data), plistType.Auto);
+            return ReadPlist(new MemoryStream(data), PlistType.Auto);
         }
 
-        public static plistType getPlistType(Stream stream)
+        public static PlistType GetPlistType(Stream stream)
         {
             byte[] magicHeader = new byte[8];
             stream.Read(magicHeader, 0, 8);
 
             if (BitConverter.ToInt64(magicHeader, 0) == 3472403351741427810)
             {
-                return plistType.Binary;
+                return PlistType.Binary;
             }
             else
             {
-                return plistType.Xml;
+                return PlistType.Xml;
             }
         }
 
-        public static object readPlist(Stream stream, plistType type)
+        public static object ReadPlist(Stream stream, PlistType type)
         {
-            if (type == plistType.Auto)
+            if (type == PlistType.Auto)
             {
-                type = getPlistType(stream);
+                type = GetPlistType(stream);
                 stream.Seek(0, SeekOrigin.Begin);
             }
 
-            if (type == plistType.Binary)
+            if (type == PlistType.Binary)
             {
                 using (BinaryReader reader = new BinaryReader(stream))
                 {
                     byte[] data = reader.ReadBytes((int) reader.BaseStream.Length);
-                    return readBinary(data);
+                    return ReadBinary(data);
                 }
             }
             else
@@ -72,27 +72,27 @@ namespace MJGame
                 XmlDocument xml = new XmlDocument();
                 xml.XmlResolver = null;
                 xml.Load(stream);
-                return readXml(xml);
+                return ReadXml(xml);
             }
         }
 
-        public static void writeXml(object value, string path)
+        public static void WriteXml(object value, string path)
         {
             using (StreamWriter writer = new StreamWriter(path))
             {
-                writer.Write(writeXml(value));
+                writer.Write(WriteXml(value));
             }
         }
 
-        public static void writeXml(object value, Stream stream)
+        public static void WriteXml(object value, Stream stream)
         {
             using (StreamWriter writer = new StreamWriter(stream))
             {
-                writer.Write(writeXml(value));
+                writer.Write(WriteXml(value));
             }
         }
 
-        public static string writeXml(object value)
+        public static string WriteXml(object value)
         {
             using (MemoryStream ms = new MemoryStream())
             {
@@ -108,7 +108,7 @@ namespace MJGame
                     xmlWriter.WriteDocType("plist", "-//Apple Computer//DTD PLIST 1.0//EN", "http://www.apple.com/DTDs/PropertyList-1.0.dtd", null);
                     xmlWriter.WriteStartElement("plist");
                     xmlWriter.WriteAttributeString("version", "1.0");
-                    compose(value, xmlWriter);
+                    Compose(value, xmlWriter);
                     xmlWriter.WriteEndElement();
                     xmlWriter.WriteEndDocument();
                     xmlWriter.Flush();
@@ -118,23 +118,23 @@ namespace MJGame
             }
         }
 
-        public static void writeBinary(object value, string path)
+        public static void WriteBinary(object value, string path)
         {
             using (BinaryWriter writer = new BinaryWriter(new FileStream(path, FileMode.Create)))
             {
-                writer.Write(writeBinary(value));
+                writer.Write(WriteBinary(value));
             }
         }
 
-        public static void writeBinary(object value, Stream stream)
+        public static void WriteBinary(object value, Stream stream)
         {
             using (BinaryWriter writer = new BinaryWriter(stream))
             {
-                writer.Write(writeBinary(value));
+                writer.Write(WriteBinary(value));
             }
         }
 
-        public static byte[] writeBinary(object value)
+        public static byte[] WriteBinary(object value)
         {
             offsetTable.Clear();
             objectTable.Clear();
@@ -144,15 +144,15 @@ namespace MJGame
             offsetTableOffset = 0;
 
             //Do not count the root node, subtract by 1
-            int totalRefs = countObject(value) - 1;
+            int totalRefs = CountObject(value) - 1;
 
             refCount = totalRefs;
 
             objRefSize = RegulateNullBytes(BitConverter.GetBytes(refCount)).Length;
 
-            composeBinary(value);
+            ComposeBinary(value);
 
-            writeBinaryString("bplist00", false);
+            WriteBinaryString("bplist00", false);
 
             offsetTableOffset = (long)objectTable.Count;
 
@@ -194,38 +194,38 @@ namespace MJGame
 
         #region Private Functions
 
-        private static object readXml(XmlDocument xml)
+        private static object ReadXml(XmlDocument xml)
         {
             XmlNode rootNode = xml.DocumentElement.ChildNodes[0];
-            return (Dictionary<string, object>)parse(rootNode);
+            return (Dictionary<string, object>)Parse(rootNode);
         }
 
-        private static object readBinary(byte[] data)
+        private static object ReadBinary(byte[] data)
         {
             offsetTable.Clear();
-            List<byte> offsetTableBytes = new List<byte>();
+            List<byte> offsetTableBytes = new();
             objectTable.Clear();
             refCount = 0;
             objRefSize = 0;
             offsetByteSize = 0;
             offsetTableOffset = 0;
 
-            List<byte> bList = new List<byte>(data);
+            List<byte> bList = new(data);
 
             List<byte> trailer = bList.GetRange(bList.Count - 32, 32);
 
-            parseTrailer(trailer);
+            ParseTrailer(trailer);
 
             objectTable = bList.GetRange(0, (int)offsetTableOffset);
 
             offsetTableBytes = bList.GetRange((int)offsetTableOffset, bList.Count - (int)offsetTableOffset - 32);
 
-            parseOffsetTable(offsetTableBytes);
+            ParseOffsetTable(offsetTableBytes);
 
-            return parseBinary(0);
+            return ParseBinary(0);
         }
 
-        private static Dictionary<string, object> parseDictionary(XmlNode node)
+        private static Dictionary<string, object> ParseDictionary(XmlNode node)
         {
             XmlNodeList children = node.ChildNodes;
             if (children.Count % 2 != 0)
@@ -233,7 +233,7 @@ namespace MJGame
                 throw new DataMisalignedException("Dictionary elements must have an even number of child nodes");
             }
 
-            Dictionary<string, object> dict = new Dictionary<string, object>();
+            Dictionary<string, object> dict = new();
 
             for (int i = 0; i < children.Count; i += 2)
             {
@@ -245,7 +245,7 @@ namespace MJGame
                     throw new ApplicationException("expected a key node");
                 }
 
-                object result = parse(valnode);
+                object result = Parse(valnode);
 
                 if (result != null)
                 {
@@ -256,13 +256,13 @@ namespace MJGame
             return dict;
         }
 
-        private static List<object> parseArray(XmlNode node)
+        private static List<object> ParseArray(XmlNode node)
         {
-            List<object> array = new List<object>();
+            List<object> array = new();
 
             foreach (XmlNode child in node.ChildNodes)
             {
-                object result = parse(child);
+                object result = Parse(child);
                 if (result != null)
                 {
                     array.Add(result);
@@ -272,24 +272,24 @@ namespace MJGame
             return array;
         }
 
-        private static void composeArray(List<object> value, XmlWriter writer)
+        private static void ComposeArray(List<object> value, XmlWriter writer)
         {
             writer.WriteStartElement("array");
             foreach (object obj in value)
             {
-                compose(obj, writer);
+                Compose(obj, writer);
             }
             writer.WriteEndElement();
         }
 
-        private static object parse(XmlNode node)
+        private static object Parse(XmlNode node)
         {
             switch (node.Name)
             {
                 case "dict":
-                    return parseDictionary(node);
+                    return ParseDictionary(node);
                 case "array":
-                    return parseArray(node);
+                    return ParseArray(node);
                 case "string":
                     return node.InnerText;
                 case "integer":
@@ -313,7 +313,7 @@ namespace MJGame
             throw new ApplicationException(String.Format("Plist Node `{0}' is not supported", node.Name));
         }
 
-        private static void compose(object value, XmlWriter writer)
+        private static void Compose(object value, XmlWriter writer)
         {
 
             if (value == null || value is string)
@@ -328,8 +328,7 @@ namespace MJGame
               value.GetType().ToString().StartsWith("System.Collections.Generic.Dictionary`2[System.String"))
             {
                 //Convert to Dictionary<string, object>
-                Dictionary<string, object> dic = value as Dictionary<string, object>;
-                if (dic == null)
+                if (value is not Dictionary<string, object> dic)
                 {
                     dic = new Dictionary<string, object>();
                     IDictionary idic = (IDictionary)value;
@@ -338,11 +337,11 @@ namespace MJGame
                         dic.Add(key.ToString(), idic[key]);
                     }
                 }
-                writeDictionaryValues(dic, writer);
+                WriteDictionaryValues(dic, writer);
             }
-            else if (value is List<object>)
+            else if (value is List<object> list)
             {
-                composeArray((List<object>)value, writer);
+                ComposeArray(list, writer);
             }
             else if (value is byte[])
             {
@@ -352,9 +351,8 @@ namespace MJGame
             {
                 writer.WriteElementString("float", ((float)value).ToString(System.Globalization.NumberFormatInfo.InvariantInfo));
             }
-            else if (value is DateTime)
+            else if (value is DateTime time)
             {
-                DateTime time = (DateTime)value;
                 string theString = XmlConvert.ToString(time, XmlDateTimeSerializationMode.Utc);
                 writer.WriteElementString("date", theString);//, "yyyy-MM-ddTHH:mm:ssZ"));
             }
@@ -368,19 +366,19 @@ namespace MJGame
             }
         }
 
-        private static void writeDictionaryValues(Dictionary<string, object> dictionary, XmlWriter writer)
+        private static void WriteDictionaryValues(Dictionary<string, object> dictionary, XmlWriter writer)
         {
             writer.WriteStartElement("dict");
             foreach (string key in dictionary.Keys)
             {
                 object value = dictionary[key];
                 writer.WriteElementString("key", key);
-                compose(value, writer);
+                Compose(value, writer);
             }
             writer.WriteEndElement();
         }
 
-        private static int countObject(object value)
+        private static int CountObject(object value)
         {
             int count = 0;
             switch (value.GetType().ToString())
@@ -389,7 +387,7 @@ namespace MJGame
                     Dictionary<string, object> dict = (Dictionary<string, object>)value;
                     foreach (string key in dict.Keys)
                     {
-                        count += countObject(dict[key]);
+                        count += CountObject(dict[key]);
                     }
                     count += dict.Keys.Count;
                     count++;
@@ -398,7 +396,7 @@ namespace MJGame
                     List<object> list = (List<object>)value;
                     foreach (object obj in list)
                     {
-                        count += countObject(obj);
+                        count += CountObject(obj);
                     }
                     count++;
                     break;
@@ -409,16 +407,16 @@ namespace MJGame
             return count;
         }
 
-        private static byte[] writeBinaryDictionary(Dictionary<string, object> dictionary)
+        private static byte[] WriteBinaryDictionary(Dictionary<string, object> dictionary)
         {
-            List<byte> buffer = new List<byte>();
-            List<byte> header = new List<byte>();
-            List<int> refs = new List<int>();
+            List<byte> buffer = new();
+            List<byte> header = new();
+            List<int> refs = new();
             for (int i = dictionary.Count - 1; i >= 0; i--)
             {
                 var o = new object[dictionary.Count];
                 dictionary.Values.CopyTo(o, 0);
-                composeBinary(o[i]);
+                ComposeBinary(o[i]);
                 offsetTable.Add(objectTable.Count);
                 refs.Add(refCount);
                 refCount--;
@@ -427,7 +425,7 @@ namespace MJGame
             {
                 var o = new string[dictionary.Count];
                 dictionary.Keys.CopyTo(o, 0);
-                composeBinary(o[i]);//);
+                ComposeBinary(o[i]);//);
                 offsetTable.Add(objectTable.Count);
                 refs.Add(refCount);
                 refCount--;
@@ -440,7 +438,7 @@ namespace MJGame
             else
             {
                 header.Add(0xD0 | 0xf);
-                header.AddRange(writeBinaryInteger(dictionary.Count, false));
+                header.AddRange(WriteBinaryInteger(dictionary.Count, false));
             }
 
 
@@ -459,15 +457,15 @@ namespace MJGame
             return buffer.ToArray();
         }
 
-        private static byte[] composeBinaryArray(List<object> objects)
+        private static byte[] ComposeBinaryArray(List<object> objects)
         {
-            List<byte> buffer = new List<byte>();
-            List<byte> header = new List<byte>();
-            List<int> refs = new List<int>();
+            List<byte> buffer = new();
+            List<byte> header = new();
+            List<int> refs = new();
 
             for (int i = objects.Count - 1; i >= 0; i--)
             {
-                composeBinary(objects[i]);
+                ComposeBinary(objects[i]);
                 offsetTable.Add(objectTable.Count);
                 refs.Add(refCount);
                 refCount--;
@@ -480,7 +478,7 @@ namespace MJGame
             else
             {
                 header.Add(0xA0 | 0xf);
-                header.AddRange(writeBinaryInteger(objects.Count, false));
+                header.AddRange(WriteBinaryInteger(objects.Count, false));
             }
 
             foreach (int val in refs)
@@ -497,41 +495,41 @@ namespace MJGame
             return buffer.ToArray();
         }
 
-        private static byte[] composeBinary(object obj)
+        private static byte[] ComposeBinary(object obj)
         {
             byte[] value;
             switch (obj.GetType().ToString())
             {
                 case "System.Collections.Generic.Dictionary`2[System.String,System.Object]":
-                    value = writeBinaryDictionary((Dictionary<string, object>)obj);
+                    value = WriteBinaryDictionary((Dictionary<string, object>)obj);
                     return value;
 
                 case "System.Collections.Generic.List`1[System.Object]":
-                    value = composeBinaryArray((List<object>)obj);
+                    value = ComposeBinaryArray((List<object>)obj);
                     return value;
 
                 case "System.Byte[]":
-                    value = writeBinaryByteArray((byte[])obj);
+                    value = WriteBinaryByteArray((byte[])obj);
                     return value;
 
                 case "System.Double":
-                    value = writeBinaryDouble((double)obj);
+                    value = WriteBinaryDouble((double)obj);
                     return value;
 
                 case "System.Int32":
-                    value = writeBinaryInteger((int)obj, true);
+                    value = WriteBinaryInteger((int)obj, true);
                     return value;
 
                 case "System.String":
-                    value = writeBinaryString((string)obj, true);
+                    value = WriteBinaryString((string)obj, true);
                     return value;
 
                 case "System.DateTime":
-                    value = writeBinaryDate((DateTime)obj);
+                    value = WriteBinaryDate((DateTime)obj);
                     return value;
 
                 case "System.Boolean":
-                    value = writeBinaryBool((bool)obj);
+                    value = WriteBinaryBool((bool)obj);
                     return value;
 
                 default:
@@ -539,25 +537,25 @@ namespace MJGame
             }
         }
 
-        public static byte[] writeBinaryDate(DateTime obj)
+        public static byte[] WriteBinaryDate(DateTime obj)
         {
-            List<byte> buffer =new List<byte>(RegulateNullBytes(BitConverter.GetBytes(PlistDateConverter.ConvertToAppleTimeStamp(obj)), 8));
+            List<byte> buffer =new(RegulateNullBytes(BitConverter.GetBytes(PlistDateConverter.ConvertToAppleTimeStamp(obj)), 8));
             buffer.Reverse();
             buffer.Insert(0, 0x33);
             objectTable.InsertRange(0, buffer);
             return buffer.ToArray();
         }
 
-        public static byte[] writeBinaryBool(bool obj)
+        public static byte[] WriteBinaryBool(bool obj)
         {
-            List<byte> buffer = new List<byte>(new byte[1] { (bool)obj ? (byte)9 : (byte)8 });
+            List<byte> buffer = new(new byte[1] { (bool)obj ? (byte)9 : (byte)8 });
             objectTable.InsertRange(0, buffer);
             return buffer.ToArray();
         }
 
-        private static byte[] writeBinaryInteger(int value, bool write)
+        private static byte[] WriteBinaryInteger(int value, bool write)
         {
-            List<byte> buffer = new List<byte>(BitConverter.GetBytes((long) value));
+            List<byte> buffer = new(BitConverter.GetBytes((long) value));
             buffer =new List<byte>(RegulateNullBytes(buffer.ToArray()));
             while (buffer.Count != Math.Pow(2, Math.Log(buffer.Count) / Math.Log(2)))
                 buffer.Add(0);
@@ -573,9 +571,9 @@ namespace MJGame
             return buffer.ToArray();
         }
 
-        private static byte[] writeBinaryDouble(double value)
+        private static byte[] WriteBinaryDouble(double value)
         {
-            List<byte> buffer =new List<byte>(RegulateNullBytes(BitConverter.GetBytes(value), 4));
+            List<byte> buffer =new(RegulateNullBytes(BitConverter.GetBytes(value), 4));
             while (buffer.Count != Math.Pow(2, Math.Log(buffer.Count) / Math.Log(2)))
                 buffer.Add(0);
             int header = 0x20 | (int)(Math.Log(buffer.Count) / Math.Log(2));
@@ -589,10 +587,10 @@ namespace MJGame
             return buffer.ToArray();
         }
 
-        private static byte[] writeBinaryByteArray(byte[] value)
+        private static byte[] WriteBinaryByteArray(byte[] value)
         {
-            List<byte> buffer = new List<byte>(value);
-            List<byte> header = new List<byte>();
+            List<byte> buffer = new(value);
+            List<byte> header = new();
             if (value.Length < 15)
             {
                 header.Add(Convert.ToByte(0x40 | Convert.ToByte(value.Length)));
@@ -600,7 +598,7 @@ namespace MJGame
             else
             {
                 header.Add(0x40 | 0xf);
-                header.AddRange(writeBinaryInteger(buffer.Count, false));
+                header.AddRange(WriteBinaryInteger(buffer.Count, false));
             }
 
             buffer.InsertRange(0, header);
@@ -610,10 +608,10 @@ namespace MJGame
             return buffer.ToArray();
         }
 
-        private static byte[] writeBinaryString(string value, bool head)
+        private static byte[] WriteBinaryString(string value, bool head)
         {
-            List<byte> buffer = new List<byte>();
-            List<byte> header = new List<byte>();
+            List<byte> buffer = new();
+            List<byte> header = new();
             foreach (char chr in value.ToCharArray())
                 buffer.Add(Convert.ToByte(chr));
 
@@ -626,7 +624,7 @@ namespace MJGame
                 else
                 {
                     header.Add(0x50 | 0xf);
-                    header.AddRange(writeBinaryInteger(buffer.Count, false));
+                    header.AddRange(WriteBinaryInteger(buffer.Count, false));
                 }
             }
 
@@ -645,7 +643,7 @@ namespace MJGame
         private static byte[] RegulateNullBytes(byte[] value, int minBytes)
         {
             Array.Reverse(value);
-            List<byte> bytes = new List<byte>(value);
+            List<byte> bytes = new(value);
             for (int i = 0; i < bytes.Count; i++)
             {
                 if (bytes[i] == 0 && bytes.Count > minBytes)
@@ -669,7 +667,7 @@ namespace MJGame
             return value;
         }
 
-        private static void parseTrailer(List<byte> trailer)
+        private static void ParseTrailer(List<byte> trailer)
         {
             offsetByteSize = BitConverter.ToInt32(RegulateNullBytes(trailer.GetRange(6, 1).ToArray(), 4), 0);
             objRefSize = BitConverter.ToInt32(RegulateNullBytes(trailer.GetRange(7, 1).ToArray(), 4), 0);
@@ -681,7 +679,7 @@ namespace MJGame
             offsetTableOffset = BitConverter.ToInt64(offsetTableOffsetBytes, 0);
         }
 
-        private static void parseOffsetTable(List<byte> offsetTableBytes)
+        private static void ParseOffsetTable(List<byte> offsetTableBytes)
         {
             for (int i = 0; i < offsetTableBytes.Count; i += offsetByteSize)
             {
@@ -691,16 +689,16 @@ namespace MJGame
             }
         }
 
-        private static object parseBinaryDictionary(int objRef)
+        private static object ParseBinaryDictionary(int objRef)
         {
-            Dictionary<string, object> buffer = new Dictionary<string, object>();
-            List<int> refs = new List<int>();
+            Dictionary<string, object> buffer = new();
+            List<int> refs = new();
             int refCount = 0;
 
             //byte dictByte = objectTable[offsetTable[objRef]];
             
             int refStartPosition;
-            refCount = getCount(offsetTable[objRef], out refStartPosition);
+            refCount = GetCount(offsetTable[objRef], out refStartPosition);
 
 
             if (refCount < 15)
@@ -717,22 +715,22 @@ namespace MJGame
 
             for (int i = 0; i < refCount; i++)
             {
-                buffer.Add((string)parseBinary(refs[i]), parseBinary(refs[i + refCount]));
+                buffer.Add((string)ParseBinary(refs[i]), ParseBinary(refs[i + refCount]));
             }
 
             return buffer;
         }
 
-        private static object parseBinaryArray(int objRef)
+        private static object ParseBinaryArray(int objRef)
         {
-            List<object> buffer = new List<object>();
-            List<int> refs = new List<int>();
+            List<object> buffer = new();
+            List<int> refs = new();
             int refCount = 0;
 
             //byte arrayByte = objectTable[offsetTable[objRef]];
 
             int refStartPosition;
-            refCount = getCount(offsetTable[objRef], out refStartPosition);
+            refCount = GetCount(offsetTable[objRef], out refStartPosition);
 
 
             if (refCount < 15)
@@ -750,13 +748,13 @@ namespace MJGame
 
             for (int i = 0; i < refCount; i++)
             {
-                buffer.Add(parseBinary(refs[i]));
+                buffer.Add(ParseBinary(refs[i]));
             }
 
             return buffer;
         }
 
-        private static int getCount(int bytePosition, out int newBytePosition)
+        private static int GetCount(int bytePosition, out int newBytePosition)
         {
             byte headerByte = objectTable[bytePosition];
             byte headerByteTrail = Convert.ToByte(headerByte & 0xf);
@@ -767,11 +765,11 @@ namespace MJGame
                 newBytePosition = bytePosition + 1;
             }
             else
-                count = (int)parseBinaryInt(bytePosition + 1, out newBytePosition);
+                count = (int)ParseBinaryInt(bytePosition + 1, out newBytePosition);
             return count;
         }
 
-        private static object parseBinary(int objRef)
+        private static object ParseBinary(int objRef)
         {
             byte header = objectTable[offsetTable[objRef]];
             switch (header & 0xF0)
@@ -786,41 +784,41 @@ namespace MJGame
                     }
                 case 0x10:
                     {
-                        return parseBinaryInt(offsetTable[objRef]);
+                        return ParseBinaryInt(offsetTable[objRef]);
                     }
                 case 0x20:
                     {
-                        return parseBinaryReal(offsetTable[objRef]);
+                        return ParseBinaryReal(offsetTable[objRef]);
                     }
                 case 0x30:
                     {
-                        return parseBinaryDate(offsetTable[objRef]);
+                        return ParseBinaryDate(offsetTable[objRef]);
                     }
                 case 0x40:
                     {
-                        return parseBinaryByteArray(offsetTable[objRef]);
+                        return ParseBinaryByteArray(offsetTable[objRef]);
                     }
                 case 0x50://String ASCII
                     {
-                        return parseBinaryAsciiString(offsetTable[objRef]);
+                        return ParseBinaryAsciiString(offsetTable[objRef]);
                     }
                 case 0x60://String Unicode
                     {
-                        return parseBinaryUnicodeString(offsetTable[objRef]);
+                        return ParseBinaryUnicodeString(offsetTable[objRef]);
                     }
                 case 0xD0:
                     {
-                        return parseBinaryDictionary(objRef);
+                        return ParseBinaryDictionary(objRef);
                     }
                 case 0xA0:
                     {
-                        return parseBinaryArray(objRef);
+                        return ParseBinaryArray(objRef);
                     }
             }
             throw new Exception("This type is not supported");
         }
 
-        public static object parseBinaryDate(int headerPosition)
+        public static object ParseBinaryDate(int headerPosition)
         {
             byte[] buffer = objectTable.GetRange(headerPosition + 1, 8).ToArray();
             Array.Reverse(buffer);
@@ -829,13 +827,13 @@ namespace MJGame
             return result;
         }
         
-        private static object parseBinaryInt(int headerPosition)
+        private static object ParseBinaryInt(int headerPosition)
         {
             int output;
-            return parseBinaryInt(headerPosition, out output);
+            return ParseBinaryInt(headerPosition, out output);
         }
 
-        private static object parseBinaryInt(int headerPosition, out int newHeaderPosition)
+        private static object ParseBinaryInt(int headerPosition, out int newHeaderPosition)
         {
             byte header = objectTable[headerPosition];
             int byteCount = (int)Math.Pow(2, header & 0xf);
@@ -846,7 +844,7 @@ namespace MJGame
             return BitConverter.ToInt32(RegulateNullBytes(buffer, 4), 0);
         }
 
-        private static object parseBinaryReal(int headerPosition)
+        private static object ParseBinaryReal(int headerPosition)
         {
             byte header = objectTable[headerPosition];
             int byteCount = (int)Math.Pow(2, header & 0xf);
@@ -856,19 +854,19 @@ namespace MJGame
             return BitConverter.ToDouble(RegulateNullBytes(buffer, 8), 0);
         }
 
-        private static object parseBinaryAsciiString(int headerPosition)
+        private static object ParseBinaryAsciiString(int headerPosition)
         {
             int charStartPosition;
-            int charCount = getCount(headerPosition, out charStartPosition);
+            int charCount = GetCount(headerPosition, out charStartPosition);
 
             var buffer = objectTable.GetRange(charStartPosition, charCount);
             return buffer.Count > 0 ? Encoding.ASCII.GetString(buffer.ToArray()) : string.Empty;
         }
 
-        private static object parseBinaryUnicodeString(int headerPosition)
+        private static object ParseBinaryUnicodeString(int headerPosition)
         {
             int charStartPosition;
-            int charCount = getCount(headerPosition, out charStartPosition);
+            int charCount = GetCount(headerPosition, out charStartPosition);
             charCount = charCount * 2;
 
             byte[] buffer = new byte[charCount];
@@ -894,17 +892,17 @@ namespace MJGame
             return Encoding.Unicode.GetString(buffer);
         }
 
-        private static object parseBinaryByteArray(int headerPosition)
+        private static object ParseBinaryByteArray(int headerPosition)
         {
             int byteStartPosition;
-            int byteCount = getCount(headerPosition, out byteStartPosition);
+            int byteCount = GetCount(headerPosition, out byteStartPosition);
             return objectTable.GetRange(byteStartPosition, byteCount).ToArray();
         }
 
         #endregion
     }
     
-    public enum plistType
+    public enum PlistType
     {
         Auto, Binary, Xml
     }
@@ -925,13 +923,13 @@ namespace MJGame
 
         public static DateTime ConvertFromAppleTimeStamp(double timestamp)
         {
-            DateTime origin = new DateTime(2001, 1, 1, 0, 0, 0, 0);
+            DateTime origin = new(2001, 1, 1, 0, 0, 0, 0);
             return origin.AddSeconds(timestamp);
         }
 
         public static double ConvertToAppleTimeStamp(DateTime date)
         {
-            DateTime begin = new DateTime(2001, 1, 1, 0, 0, 0, 0);
+            DateTime begin = new(2001, 1, 1, 0, 0, 0, 0);
             TimeSpan diff = date - begin;
             return Math.Floor(diff.TotalSeconds);
         }
