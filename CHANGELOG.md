@@ -75,3 +75,10 @@
 > **[1.0.15] - 2024-1-4**
 ##### **Add**
 -  `Add API`
+
+---
+> **[1.0.16] - 2024-1-10**
+##### **Fixed StateMachine**
+-  `Fixed StateMachine`
+##### **Add**
+-  `Add FPS, ButtonExtension`

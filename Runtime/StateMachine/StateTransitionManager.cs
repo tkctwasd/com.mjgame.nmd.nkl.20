@@ -40,8 +40,8 @@ namespace MJGame
             if (transitions.ContainsKey(currentState.GetType()) && transitions[currentState.GetType()].ContainsKey(triggerName))
             {
                 var targetStateType = transitions[currentState.GetType()][triggerName];
+                if(currentState.GetType() == targetStateType) return;
                 var targetState = Activator.CreateInstance(targetStateType, stateMachine, stateMachine.GetContext()) as State<T>;
-
                 stateMachine.SetState(targetState);
             }
         }
