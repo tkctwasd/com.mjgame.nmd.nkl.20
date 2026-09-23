@@ -1,0 +1,19 @@
+{
+    "name": "Mindongun",
+    "rootNamespace": "",
+    "references": [
+        "DOTween.Modules",
+        "Unity.TextMeshPro",
+        "Cinemachine",
+        "UnityEngine.UI"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

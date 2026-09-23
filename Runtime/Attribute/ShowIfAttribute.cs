@@ -1,159 +1,95 @@
-using System;
-using System.Diagnostics;
 using UnityEngine;
-namespace MJGame {
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 
-/// <summary>
-/// Defines how multiple boolean conditions are evaluated in ShowIfAttribute and ShowIfNotAttribute
-/// </summary>
-public enum BoolOperator
-{
-    /// <summary> Check if all given bool values are true </summary>
-    And,
-    /// <summary> Check if all one of given bool values is true </summary>
-    Or,
-}
-/// <summary>
-/// Defines how object values are translated to boolean values in ShowIfAttribute and ShowIfNotAttribute
-/// </summary>
-public enum ComparisonOp
-{
-    /// <summary> Check if all given field values are equal </summary>
-    Equals,
-    /// <summary> Check if all given field values are not null </summary>
-    NotNull,
-    /// <summary> Check if all given field values are null </summary>
-    Null,
-}
-/// <summary>
-/// Some common conditions for the use in ShowIfAttribute and ShowIfNotAttribute
-/// </summary>
-public enum StaticConditions
-{
-    /// <summary> If you are currently playing </summary>
-    IsPlaying,
-    /// <summary> If you are currently not playing </summary>
-    IsNotPlaying,
-    True,
-    False,
-    /// <summary> If current object (interpreted as Monobehaviour) is enabled </summary>
-    IsEnabled,
-    /// <summary> If current object (interpreted as Monobehaviour) is enabled and its gameobject is active </summary>
-    IsActiveAndEnabled,
-}
 
-/// <summary>
-/// Looks, whether the bool/method with given name(s) is/are true - Otherwise it will be greyed out or hidden.
-/// </summary>
-[AttributeUsage(AttributeTargets.Field)]
-[Conditional("UNITY_EDITOR")]
 public class ShowIfAttribute : PropertyAttribute
 {
-    public const float indentation = 15;
+    public string conditionField;
+    public int[] enumValues;
 
-    public readonly BoolOperator? op;
-    public readonly ComparisonOp? comOp;
-
-    /// <summary> null-path's get ignored </summary>
-    public readonly string[] conditionPaths;
-    public DisabledStyle style = DisabledStyle.Invisible;
-    /// <summary>
-    /// The offset in the inspector applied on the member (to the right side)
-    /// </summary>
-    public int indent = 1;
-    public bool Invert { get; protected set; } = false;
-
-    private ShowIfAttribute()
+    /// <summary>Field chỉ hiện khi conditionField bằng một trong các giá trị truyền vào.</summary>
+    public ShowIfAttribute(string conditionField, params int[] enumValues)
     {
-        order = -10;
-    }
-    protected ShowIfAttribute(params string[] conditionPaths)
-    : this()
-    {
-        this.conditionPaths = conditionPaths;
-    }
-    /// <summary>
-    /// Looks, whether the bool/method with given name/path is true
-    /// </summary>
-    /// <param name="conditionPath">Name/path of an bool/method in scope</param>
-    public ShowIfAttribute(string conditionPath)
-    : this(new string[1] { conditionPath })
-    { }
-    public ShowIfAttribute(StaticConditions condition)
-    : this(condition.ToString())
-    { }
-    /// <summary>
-    /// Looks, whether the bools/methods with given names/paths are true
-    /// </summary>
-    /// <param name="conditionPath">Name/path of an bool/method in scope</param>
-    public ShowIfAttribute(BoolOperator op, params string[] conditionPaths)
-    : this(conditionPaths)
-    {
-        this.op = op;
-    }
-    public ShowIfAttribute(BoolOperator op, StaticConditions cond1, string cond2 = null, string cond3 = null, string cond4 = null)
-    : this(op, cond1.ToString(), cond2, cond3, cond4) { }
-    public ShowIfAttribute(BoolOperator op, string cond1, StaticConditions cond2, string cond3 = null, string cond4 = null)
-    : this(op, cond1, cond2.ToString(), cond3, cond4) { }
-    public ShowIfAttribute(BoolOperator op, string cond1, string cond2, StaticConditions cond3, string cond4 = null)
-    : this(op, cond1, cond2, cond3.ToString(), cond4) { }
-    /// <summary>
-    /// Checks values on given paths/names
-    /// <param name="conditionPath">Name/path of an bool/method in scope</param>
-    public ShowIfAttribute(ComparisonOp com, params string[] conditionPaths)
-    : this(conditionPaths)
-    {
-        this.comOp = com;
+        this.conditionField = conditionField;
+        this.enumValues = enumValues;
     }
 }
-[Conditional("UNITY_EDITOR")]
-public class ShowIfNotAttribute : ShowIfAttribute
+
+#if UNITY_EDITOR
+[CustomPropertyDrawer(typeof(ShowIfAttribute))]
+public class ShowIfDrawer : PropertyDrawer
 {
+    public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
+    {
+        if (ShouldShow(property))
+        {
+            EditorGUI.PropertyField(position, property, label, true);
+        }
+    }
+
+    public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
+    {
+        if (ShouldShow(property))
+            return EditorGUI.GetPropertyHeight(property, label, true);
+
+        // Ẩn hoàn toàn (không để lại khoảng trống)
+        return 0f;
+    }
+
+    private bool ShouldShow(SerializedProperty property)
+    {
+        ShowIfAttribute showIf = (ShowIfAttribute)attribute;
+
+        // Tính toán đường dẫn đầy đủ đến field điều kiện
+        string fullPath = GetConditionPath(property, showIf.conditionField);
+
+        SerializedProperty conditionProp = property.serializedObject.FindProperty(fullPath);
+
+        if (conditionProp == null)
+            return true; // Nếu không tìm thấy điều kiện → hiển thị mặc định (an toàn)
+
+        if (conditionProp.propertyType == SerializedPropertyType.Enum)
+        {
+            if (showIf.enumValues == null || showIf.enumValues.Length == 0)
+                return true;
+
+            foreach (int value in showIf.enumValues)
+            {
+                if (conditionProp.enumValueIndex == value)
+                    return true;
+            }
+            return false;
+        }
+
+        if (conditionProp.propertyType == SerializedPropertyType.Boolean)
+        {
+            return conditionProp.boolValue;
+        }
+
+        return true;
+    }
+
     /// <summary>
-    /// Looks, whether the bool/method with given name/path is false
+    /// Dựng lại path đầy đủ của conditionField, hoạt động được cả trong class Serializable.
     /// </summary>
-    /// <param name="conditionPath">Name/path of an bool/method in scope</param>
-    public ShowIfNotAttribute(string conditionPath)
-    : base(conditionPath)
+    private string GetConditionPath(SerializedProperty property, string conditionField)
     {
-        this.Invert = true;
-    }
-    public ShowIfNotAttribute(StaticConditions condition)
-    : base(condition)
-    {
-        this.Invert = true;
-    }
-    /// <summary>
-    /// Looks, whether the bools/methods with given names/paths are false
-    /// </summary>
-    /// <param name="conditionPath">Name/path of an bool/method in scope</param>
-    public ShowIfNotAttribute(BoolOperator op, params string[] conditionPaths)
-    : base(op, conditionPaths)
-    {
-        this.Invert = true;
-    }
-    public ShowIfNotAttribute(BoolOperator op, StaticConditions cond1, string cond2 = null, string cond3 = null, string cond4 = null)
-    : base(op, cond1.ToString(), cond2, cond3, cond4)
-    {
-        this.Invert = true;
-    }
-    public ShowIfNotAttribute(BoolOperator op, string cond1, StaticConditions cond2, string cond3 = null, string cond4 = null)
-    : base(op, cond1, cond2.ToString(), cond3, cond4)
-    {
-        this.Invert = true;
-    }
-    public ShowIfNotAttribute(BoolOperator op, string cond1, string cond2, StaticConditions cond3, string cond4 = null)
-    : base(op, cond1, cond2, cond3.ToString(), cond4)
-    {
-        this.Invert = true;
-    }
-    /// <summary>
-    /// Checks values on given paths/names
-    /// <param name="conditionPath">Name/path of an bool/method in scope</param>
-    public ShowIfNotAttribute(ComparisonOp com, params string[] conditionPaths)
-    : base(com, conditionPaths)
-    {
-        this.Invert = true;
+        string path = property.propertyPath;
+        int lastDot = path.LastIndexOf('.');
+        if (lastDot >= 0)
+        {
+            // ví dụ: Door.doorType → Door.rotateAxis
+            path = path.Substring(0, lastDot + 1) + conditionField;
+        }
+        else
+        {
+            // field cấp cao nhất
+            path = conditionField;
+        }
+
+        return path;
     }
 }
-}
+#endif

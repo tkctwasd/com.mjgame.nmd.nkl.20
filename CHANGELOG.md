@@ -1,84 +1,203 @@
-## CHANGELOG
+# Changelog
 
-
-> Version `1.0.6` 
-
-> Update 2024-12-07 20:12:23
-
-> by nmd
-----
+All notable changes to this package will be documented in this file.
 
 ---
-> **[1.0.6] - 2024-12-07**
 
-##### **Added**
-- `CHANGELOG`,  `LICENSE`
+# [2.0.0] - 2026-09-23
 
-##### **Fixed**
-- `README.md` StateMachine, Pool
-- `ScriptTracker.cs` --> `TrackerAttribute.cs`
+> [!IMPORTANT]
+>
+> ## MJGame Core 2.0
+>
+> Core `2.x` is a **new generation** of the MJGame framework.
+>
+> The framework has been **rebuilt from the ground up** with a new architecture, coding structure, technology stack, and development workflow.
+>
+> Core `2.x` **replaces the legacy Core `1.x` architecture**.
 
+> [!WARNING]
+>
+> ## Breaking Changes
+>
+> Core `2.x` is **not backward compatible** with Core `1.x`.
+>
+> Existing projects using Core `1.x` may require migration or system rewrites.
+>
+> Legacy APIs, components, and implementation patterns are not guaranteed to work with Core `2.x`.
+
+###  New Generation
+
+* Completely rebuilt the framework with a new core architecture.
+* Replaced the legacy `1.x` core implementation.
+* Introduced a new coding architecture and development workflow.
+* Redesigned the framework for modern Unity development.
+* Standardized coding conventions and naming conventions.
+* Redesigned core systems with modularity and reusability as primary goals.
+* Separated core framework systems from game-specific implementations.
+* Improved portability for reuse across multiple Unity projects.
+
+### Rebuilt Systems
+
+* `UI` - New UI architecture based on `UIPanel`.
+* `Pool` - New object pooling architecture.
+* `StateMachine` - New FSM architecture based on `IState`.
+* `Save` - New JSON-based data and save architecture.
+* `Audio` - Rebuilt audio management system.
+* `Camera` - New camera architecture and utilities.
+* `Joystick` - New mobile input system.
+* `Indicator` - New world and UI indicator architecture.
+* `Trigger` - New trigger and interaction utilities.
+* `Extensions` - Reorganized and expanded shared extension methods.
+* `Editor` - New editor and development tools.
+
+###  Architecture
+
+* Introduced a modular core structure.
+* Introduced standardized base classes and interfaces.
+* Redesigned system initialization and lifecycle.
+* Reduced dependencies between core modules.
+* Removed game-specific logic from the core framework.
+* Reorganized `Runtime` and `Editor` assemblies.
+* Standardized package structure.
+* Improved extensibility for project-specific systems.
+
+### Technology
+
+* Migrated to the new Unity package architecture.
+* Updated assembly definition structure.
+* Standardized `uGUI` and `TextMeshPro` integration.
+* Standardized `DOTween` integration.
+* Standardized JSON serialization using `Newtonsoft Json`.
+* Updated `Cinemachine` integration.
+* Updated package dependencies for the new core architecture.
+
+###  Dependencies
+
+* `Unity UI (uGUI)` - 1.0.0
+* `TextMeshPro` - 3.0.7
+* `Cinemachine` - 2.10.7
+* `Newtonsoft Json` - 3.2.2
+
+> [!NOTE]
+> **Core 2.0 is a fresh foundation.**
+>
+> Version `2.0.0` is not an incremental update of Core `1.x`.
+> It represents a complete transition to the next generation of the MJGame framework.
 
 ---
-> **[1.0.7] - 2024-12-08**
-##### **Fixed**
-- `.assembly`
 
+## [1.0.16] - 2024-01-10
 
----
-> **[1.0.8] - 2024-12-09**
-##### **Added**
-- `Audio`
+### Added
 
-##### **Fixed**
-- `Editor Window`
-- `Sample~`
+* `FPS`
+* `ButtonExtension`
 
+### Fixed
 
+* `StateMachine`
 
 ---
-> **[1.0.9] - 2024-12-11**
-##### **Fixed**
-- `UI`
 
+## [1.0.15] - 2024-01-04
 
----
-> **[1.0.10] - 2024-12-13**
-##### **Fixed**
-- `Audio`
-- `UI`
-- `Sample~`
+### Added
+
+* `API`
 
 ---
-> **[1.0.11] - 2024-12-23**
-##### **Fixed**
-- `Folder`
--  `LogExtension`
+
+## [1.0.14] - 2024-01-04
+
+### Fixed
+
+* Build errors related to the `Editor` folder.
 
 ---
-> **[1.0.12] - 2024-12-27**
-##### **Fixed**
--  `UIManager`
+
+## [1.0.13] - 2024-12-28
+
+### Updated
+
+* `DataGameProfile`
 
 ---
-> **[1.0.13] - 2024-12-28**
-##### **Update**
--  `DataGameProfile`
+
+## [1.0.12] - 2024-12-27
+
+### Fixed
+
+* `UIManager`
 
 ---
-> **[1.0.14] - 2024-1-4**
-##### **Fixed**
--  `Build game error folder editor`
 
+## [1.0.11] - 2024-12-23
 
----
-> **[1.0.15] - 2024-1-4**
-##### **Add**
--  `Add API`
+### Fixed
+
+* Folder structure.
+* `LogExtension`
 
 ---
-> **[1.0.16] - 2024-1-10**
-##### **Fixed StateMachine**
--  `Fixed StateMachine`
-##### **Add**
--  `Add FPS, ButtonExtension`
+
+## [1.0.10] - 2024-12-13
+
+### Fixed
+
+* `Audio`
+* `UI`
+* `Samples~`
+
+---
+
+## [1.0.9] - 2024-12-11
+
+### Fixed
+
+* `UI`
+
+---
+
+## [1.0.8] - 2024-12-09
+
+### Added
+
+* `Audio`
+
+### Fixed
+
+* `Editor Window`
+* `Samples~`
+
+---
+
+## [1.0.7] - 2024-12-08
+
+### Fixed
+
+* Assembly definitions.
+
+---
+
+## [1.0.6] - 2024-12-07
+
+### Added
+
+* `CHANGELOG.md`
+* `LICENSE`
+
+### Fixed
+
+* `README.md`
+* `StateMachine`
+* `Pool`
+* Renamed `ScriptTracker.cs` to `TrackerAttribute.cs`
+
+---
+
+## Legacy
+
+Core `1.x` represents the original generation of the MJGame framework.
+
+Core `2.x` introduces a completely new architecture, coding structure, technology stack, development workflow, and implementation of the framework's primary systems.
