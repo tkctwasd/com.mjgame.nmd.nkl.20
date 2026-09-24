@@ -28,7 +28,7 @@ public class IndicatorController : MonoBehaviour
     }
     void DrawIndicators()
     {
-        // Player cua game tu dang ky IPlayerRoot vao PlayerBootstrap
+        // Player cua game tu dang ky IPlayer vao PlayerBootstrap
         if (!PlayerBootstrap.Has<IPlayer>()) return;
         Transform playerTransform = PlayerBootstrap.Get<IPlayer>().Root;
         if (playerTransform == null) return;

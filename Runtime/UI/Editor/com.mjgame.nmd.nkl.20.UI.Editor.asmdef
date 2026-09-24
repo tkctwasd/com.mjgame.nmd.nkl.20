@@ -1,8 +1,8 @@
 {
-    "name": "Mindongun.Editor",
+    "name": "com.mjgame.nmd.nkl.20.UI.Editor",
     "rootNamespace": "",
     "references": [
-        "Mindongun",
+        "GUID:508b9260f11172144bdada14a1c9659e",
         "DOTween.Modules",
         "Unity.TextMeshPro",
         "Cinemachine",

@@ -4,8 +4,8 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// Quan ly panel theo type. Panel cua game nhan vai tro bang cac interface trong IPanelRoles
-/// (panel mo dau, panel luon nam tren cung...), khung tim chung bang Find&lt;T&gt;().
+/// Quan ly panel theo type. Panel dac biet chon vai tro bang dropdown PanelRole tren Inspector
+/// (ShowOnStart: panel mo dau, AlwaysOnTop: luon nam tren cung), tim panel bang GetPanel&lt;T&gt;().
 /// </summary>
 public class UIManager : Singleton<UIManager>
 {

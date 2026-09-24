@@ -1,0 +1,34 @@
+# Unity generated
+[Ll]ibrary/
+[Tt]emp/
+[Oo]bj/
+[Ll]ogs/
+[Uu]ser[Ss]ettings/
+
+# IDE
+.vs/
+.vscode/
+.idea/
+
+# Generated project files
+*.csproj
+*.unityproj
+*.sln
+*.suo
+*.user
+
+# Build
+[Bb]in/
+[Bb]uild/
+[Bb]uilds/
+*.apk
+*.aab
+*.unitypackage
+
+# Debug
+*.pdb
+
+# OS
+.DS_Store
+Thumbs.db
+Desktop.ini
