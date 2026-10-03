@@ -4,7 +4,7 @@
 |---|---|
 | Package | `com.mjgame.nmd.nkl.20` |
 | Ten hien thi | mindongun |
-| Phien ban | **2.0.0** (2026-09-23, Core 2, thay the Core 1.x) |
+| Phien ban | **2.0.1** (2026-10-03, Core 2, thay the Core 1.x) |
 | Unity | 2022.3 tro len |
 | Tac gia | mindongun |
 
@@ -54,7 +54,8 @@ ke thua, override, interface va lua chon tren Inspector.
 **DOTween bat buoc lam them buoc nay:** mo `Tools > Demigiant > DOTween Utility Panel`, bam **Create ASMDEF**
 de sinh `DOTween.Modules.asmdef`. Thieu buoc nay khung khong bien dich.
 
-Khong can MaxSdk, Firebase, Adjust: quang cao va analytics nam ben game.
+Khong can MaxSdk, Firebase, Adjust: quang cao, IAP va analytics nam trong package rieng
+**`com.mjgame.nmd.nkl.20.monetization`** (phu thuoc Core, xem README cua package do).
 
 ### Cach 1: chep vao Assets (nhanh, sua truc tiep duoc)
 
@@ -109,6 +110,10 @@ public partial class DataSave : SaveBase<DataSave>
     protected override void OnDeleteSave() => JsonDataUtility.DeleteData(KEY_GAME);
 }
 ```
+
+`DataSave` phai **ton tai luc chay** (prefab trong Bootstrap o buoc 3, hoac
+`[RuntimeInitializeOnLoadMethod] static void Bootstrap() => _ = Instance;`). Khong co object `DataSave`
+thi khong load/save gi ca, PlayerPrefs se khong co key. Dung Monetization: lam them theo README cua package do.
 
 **2. Prefab trong `Resources/`** (moi prefab mot component chinh):
 `DataSave`, `AudioManager` (gan `AudioConfig`), `Canvas` (co `UIManager`, cac panel la con cua `panelParent`),
@@ -191,7 +196,9 @@ Key la type generic: `Register<IPlayer>(this)` va `Register<PlayerController>(th
 `SaveBase<T> : Singleton<T>` — luu JSON (Newtonsoft) vao PlayerPrefs.
 
 - Tu load trong `Awake`, DontDestroyOnLoad, tu save khi pause / mat focus / thoat.
-- Data chung moi game: `DataSetting`, `DataAvatar`, `DataRate`, `DataMonetization`.
+- Data chung moi game: `DataSetting`, `DataAvatar`, `DataRate`.
+- Data cua package khac (vd `DataMonetization` cua Monetization) do `DataSave` cua game giu va luu,
+  roi gan vao static `Current` cua class do (package khong thay duoc `DataSave`).
 - API: `SaveGame()`, `LoadGame()`, `NewGame()`, `DeleteSave()`.
 - Hook cho game: `OnLoadGame`, `OnSaveGame`, `OnNewGame`, `OnDeleteSave` (xem [Bat dau nhanh](#bat-dau-nhanh)).
 
@@ -200,7 +207,6 @@ Key la type generic: `Register<IPlayer>(this)` va `Register<PlayerController>(th
 | `DataSetting` | `Music`, `Sound`, `Vibrate`, `Sensitivity` (JSON key `Sensivity`), `Distance`; `static Current` = ban dang dung |
 | `DataAvatar` | `SkinCurrent`, `ListSkinUnlocked`, `SetUnlockSkin(id)`, `MAX_SKIN` |
 | `DataRate` | `IsRate`, `NumberShowRate`, `LastShowTime` |
-| `DataMonetization` | `IsRemoveAdsPurchased`, `RemoveAdsPurchased()` |
 
 `JsonDataUtility`: `SaveData(key, obj)`, `LoadData<T>(key)` (tra `default` neu chua co key), `DeleteData(key)`.
 
@@ -486,7 +492,7 @@ Attribute cho Inspector: `[Button]` (chay ham), `[ReadOnly]`, `[ColorLabel]` / `
 | `Consts` | Key khung dung: `Tag_Player`, `Au_ClickButton`. Key cua game de trong class rieng cua game |
 | `Vibration.Vibrate()` | Rung (doc `DataSetting.Current.Vibrate`, bo qua tren standalone) |
 | `CoroutineHelper` | `StartCoroutineStatic(ie)`, `StopCoroutineStatic(c)`, `LoopCoroutine(...)` cho code static |
-| `LogMessage` | Log co tag |
+| `LogMessage` | Log co tag. Tag Ads/IAP/Firebase nam o `MonetLogMessage` cua Monetization |
 | `MeshDrawPath` | Ve duong huong dan tren mat dat |
 | `FPSCounter`, `FPSUI`, `GUIGlitch` | Debug hieu nang |
 
@@ -518,7 +524,8 @@ Attribute cho Inspector: `[Button]` (chay ham), `[ReadOnly]`, `[ColorLabel]` / `
 
 **Khong nam trong khung** (game tu giu, chep tu project gan nhat roi sua): Player, Bot, Enemy, Map, Controller,
 Manager, Tutorial, Obstacle, SO cua game, `BootstrapScene`, `ItemsTrigger`, key/enum/event cua game
-(`Preconsts`, `Types`, `EventAction`), `Converter`, Analytic, Ads/IAP/Remote Config.
+(`Preconsts`, `Types`, `EventAction`), `Converter`.
+Ads, IAP, Firebase, Remote Config: dung package `com.mjgame.nmd.nkl.20.monetization`.
 
 ---
 
@@ -547,6 +554,7 @@ Manager, Tutorial, Obstacle, SO cua game, `BootstrapScene`, `ItemsTrigger`, key/
 | Indicator khong hien | Chua dang ky `IPlayer`, thieu entry trong `IndicatorConfig`, hoac `Show = false` |
 | `ToState<T>()` khong doi state | State chua co transition nao |
 | Save cu load ra list trung phan tu | Thieu `ObjectCreationHandling.Replace` tren list |
+| PlayerPrefs khong co key cua game | Chua co object `DataSave` luc chay, hoac chua save lan nao (save khi pause / mat focus / thoat / `NewGame()`) |
 
 Kiem tra bien dich ngoai Unity (sau khi Unity sinh `.csproj`, chay o thu muc goc project):
 

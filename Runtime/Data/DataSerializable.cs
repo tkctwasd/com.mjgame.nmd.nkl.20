@@ -48,7 +48,7 @@ public class DataAvatar
     [JsonProperty(ObjectCreationHandling = ObjectCreationHandling.Replace)]
     public List<bool> ListSkinUnlocked;
 
-    public const int MAX_SKIN = 5;
+    public const int MAX_SKIN = 10;
 
     public void SetUnlockSkin(int idSkin)
     {
@@ -101,23 +101,4 @@ public class DataRate
     }
 
 }
-#endregion
-
-#region Monetization
-[Serializable]
-public class DataMonetization
-{
-    public bool IsRemoveAdsPurchased;
-
-    public DataMonetization()
-    {
-        IsRemoveAdsPurchased = false;
-    }
-    public void RemoveAdsPurchased()
-    {
-        IsRemoveAdsPurchased = true;
-    }
-
-}
-
 #endregion

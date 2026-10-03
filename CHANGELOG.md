@@ -4,6 +4,20 @@ All notable changes to this package will be documented in this file.
 
 ---
 
+## [2.0.1] - 2026-10-03
+
+### Changed
+
+* Ads, IAP, Firebase and Remote Config now live in the separate package `com.mjgame.nmd.nkl.20.monetization` (depends on Core `2.0.x`).
+* `DataMonetization` is no longer listed as Core save data. It belongs to Monetization and is stored by the game `DataSave`, exposed through `DataMonetization.Current`.
+
+### Documentation
+
+* `README.md`: added the Monetization package reference, how package data is stored through the game `DataSave`, and that `DataSave` must exist at runtime.
+* `README.md`: added troubleshooting for missing PlayerPrefs keys.
+
+---
+
 # [2.0.0] - 2026-09-23
 
 > [!IMPORTANT]

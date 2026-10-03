@@ -271,7 +271,6 @@ public class ButtonAttributeDrawer : Editor
             catch (Exception e)
             {
                 Debug.LogError($"❌ Error invoking {method.Name} on {t.name}: {e.InnerException?.Message ?? e.Message}");
-                // In kèm stack trace thật của hàm bị lỗi (double-click để nhảy tới dòng gây lỗi)
                 Debug.LogException(e.InnerException ?? e, t);
             }
         }

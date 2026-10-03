@@ -11,13 +11,11 @@ public abstract class SaveBase<T> : Singleton<T> where T : MonoBehaviour
     public DataSetting DataSetting { get; private set; }
     public DataAvatar DataAvatar { get; private set; }
     public DataRate DataRate { get; private set; }
-    public DataMonetization DataMonetization { get; private set; }
 
     // Keys
-    private const string KEY_AVATAR = "data_avatar_fls";
-    private const string KEY_SETTING = "data_setting_fls";
-    private const string KEY_RATE = "data_rate_fls";
-    private const string KEY_MONETIZATION = "data_monetization_fls";
+    private const string KEY_AVATAR = "data_avatar_nmd";
+    private const string KEY_SETTING = "data_setting_nmd";
+    private const string KEY_RATE = "data_rate_nmd";
 
     protected override void Awake()
     {
@@ -34,7 +32,6 @@ public abstract class SaveBase<T> : Singleton<T> where T : MonoBehaviour
         JsonDataUtility.SaveData(KEY_AVATAR, DataAvatar);
         JsonDataUtility.SaveData(KEY_SETTING, DataSetting);
         JsonDataUtility.SaveData(KEY_RATE, DataRate);
-        JsonDataUtility.SaveData(KEY_MONETIZATION, DataMonetization);
 
         Debug.Log("<color=orange>[SaveSystem]</color> All data saved.");
     }
@@ -45,7 +42,6 @@ public abstract class SaveBase<T> : Singleton<T> where T : MonoBehaviour
         DataAvatar = JsonDataUtility.LoadData<DataAvatar>(KEY_AVATAR) ?? new DataAvatar(true);
         DataSetting = JsonDataUtility.LoadData<DataSetting>(KEY_SETTING) ?? new DataSetting();
         DataRate = JsonDataUtility.LoadData<DataRate>(KEY_RATE) ?? new DataRate();
-        DataMonetization = JsonDataUtility.LoadData<DataMonetization>(KEY_MONETIZATION) ?? new DataMonetization();
 
         global::DataSetting.Current = DataSetting;
 
@@ -58,7 +54,6 @@ public abstract class SaveBase<T> : Singleton<T> where T : MonoBehaviour
         DataAvatar = new DataAvatar(true);
         DataSetting = new DataSetting();
         DataRate = new DataRate();
-        DataMonetization = new DataMonetization();
 
         global::DataSetting.Current = DataSetting;
 
@@ -72,7 +67,6 @@ public abstract class SaveBase<T> : Singleton<T> where T : MonoBehaviour
         JsonDataUtility.DeleteData(KEY_AVATAR);
         JsonDataUtility.DeleteData(KEY_SETTING);
         JsonDataUtility.DeleteData(KEY_RATE);
-        JsonDataUtility.DeleteData(KEY_MONETIZATION);
 
         Debug.Log("<color=red>[SaveSystem]</color> All data deleted.");
     }
