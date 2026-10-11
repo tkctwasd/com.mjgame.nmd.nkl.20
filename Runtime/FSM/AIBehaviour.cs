@@ -10,16 +10,34 @@ using UnityEditor;
 public abstract class AIBehaviour : MonoBehaviour
 {
     protected StateMachine StateMachine;
-    public IState CurrentState => StateMachine.CurrentState;
+    public IState CurrentState => StateMachine?.CurrentState;
     public abstract void Init();
     protected virtual void Awake()
     {
         Init();
+        if (StateMachine == null)
+        {
+            Debug.LogError($"[FSM] {GetType().Name}.Init() phai tao StateMachine = new StateMachine(this).", this);
+        }
     }
 
     public void AddTransition<T>(T from, T to) where T : IState
     {
         StateMachine.AddTransition(new Transition(from, to));
+    }
+    /// <summary>
+    /// Transition tu chuyen khi check tra true.
+    /// </summary>
+    public void AddTransition(IState from, IState to, TransitionDelegate check)
+    {
+        StateMachine.AddTransition(new Transition(from, to, check));
+    }
+    /// <summary>
+    /// Any State: tu bat ky state nao sang target khi check tra true.
+    /// </summary>
+    public void AddAnyTransition(IState to, TransitionDelegate check)
+    {
+        StateMachine.AddTransition(new Transition(null, to, check));
     }
     public void AddTransitionsTo<T>(T target, params T[] froms) where T : IState
     {
@@ -27,6 +45,10 @@ public abstract class AIBehaviour : MonoBehaviour
         {
             StateMachine.AddTransition(new Transition(from, target));
         }
+    }
+    public void AddState(IState state)
+    {
+        StateMachine.AddState(state);
     }
 
     /// <summary>
@@ -40,15 +62,15 @@ public abstract class AIBehaviour : MonoBehaviour
 
     public virtual void Update()
     {
-        StateMachine.OnUpdate(Time.deltaTime);
+        StateMachine?.OnUpdate(Time.deltaTime);
     }
 
     public virtual void FixedUpdate()
     {
-        StateMachine.OnFixedUpdate();
+        StateMachine?.OnFixedUpdate();
     }
     public virtual void LateUpdate()
     {
-        StateMachine.OnLateUpdate(Time.deltaTime);
+        StateMachine?.OnLateUpdate(Time.deltaTime);
     }
 }

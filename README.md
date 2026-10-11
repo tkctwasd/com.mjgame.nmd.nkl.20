@@ -324,9 +324,9 @@ public class Coin : PoolableObject
 | Type | Vai tro |
 |---|---|
 | `State` | Trang thai. Override `OnEnter(prev)`, `OnExit(next)`, `OnUpdate(dt)`, `OnLateUpdate(dt)`, `OnFixedUpdate()`. Co `Timer`, `Parent` |
-| `StateMachine` | `new StateMachine(aiBehaviour)`; `AddTransition(t)`, `ToState<T>()`, `ToPrevState()`, `CurrentState`, `PrevState`, `DefaultState` |
-| `Transition` | `new Transition(from, to)`; event `OnCheck` (tu chuyen khi tra true), `OnTransition` |
-| `AIBehaviour` | MonoBehaviour chu FSM. Implement `Init()` (goi trong `Awake`); `AddTransition(from, to)`, `AddTransitionsTo(target, froms...)`, `ToState<T>()`; tu goi update cua FSM |
+| `StateMachine` | `new StateMachine(aiBehaviour)`; `AddTransition(t)`, `AddState(s)`, `ToState<T>()`, `ToState(s)`, `ToPrevState()`, `GetState<T>()`, `IsInState<T>()`, `CurrentState`, `PrevState`, `DefaultState`, event `OnStateChanged(prev, next)` |
+| `Transition` | `new Transition(from, to)` hoac `new Transition(from, to, check)`; `from = null` la Any State. Event `OnCheck` (tu chuyen khi tra true), `OnTransition` (tra false de chan) |
+| `AIBehaviour` | MonoBehaviour chu FSM. Implement `Init()` (goi trong `Awake`, phai tao `StateMachine`); `AddTransition(from, to[, check])`, `AddAnyTransition(to, check)`, `AddTransitionsTo(target, froms...)`, `AddState(s)`, `ToState<T>()`; tu goi update cua FSM |
 
 ```csharp
 public class StateEnemyIdle : State
@@ -337,18 +337,28 @@ public class StateEnemyIdle : State
 
 public class EnemyAnim : AIBehaviour
 {
+    public float Speed;
+    public bool IsDead;
+
     public override void Init()
     {
         StateMachine = new StateMachine(this);
         var idle = new StateEnemyIdle(StateMachine);
         var run = new StateEnemyRun(StateMachine);
-        AddTransition(idle, run);
-        AddTransition(run, idle);
+        var dead = new StateEnemyDead(StateMachine);
+        StateMachine.DefaultState = idle;                 // OnEnter(null) duoc goi o frame dau
+        AddTransition(idle, run, () => Speed > 0.1f);     // tu chuyen
+        AddTransition(run, idle, () => Speed <= 0.1f);
+        AddAnyTransition(dead, () => IsDead);             // tu moi state
     }
 }
 ```
 
-**State chi duoc dang ky qua transition.** State khong co transition nao thi `ToState<T>()` khong lam gi.
+- Moi frame: `OnUpdate` cua state hien tai chay truoc, sau do kiem tra Any State roi transition cua state hien tai; doi toi da 1 lan/frame.
+- Transition khong co `OnCheck` khong tu chuyen, chi dung de dang ky state; doi bang `ToState<T>()`.
+- State dang ky theo **kieu (Type)**: moi class state chi co 1 instance trong mot `StateMachine`. Muon 2 state giong nhau thi tao 2 class.
+- `ToState<T>()` voi state chua dang ky (qua `AddState`, transition hoac `DefaultState`) se log warning va khong doi.
+- `ToState` sang chinh state hien tai bi bo qua (khong goi lai `OnEnter`).
 
 ### Audio
 

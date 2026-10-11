@@ -4,6 +4,27 @@ All notable changes to this package will be documented in this file.
 
 ---
 
+## [2.0.2] - 2026-10-11
+
+### Fixed
+
+* FSM: transitions now fire automatically when `OnCheck` returns true (as documented). Previously `ShouldBegin()` / `TransitionCallback()` were never evaluated.
+* FSM: `DefaultState.OnEnter` is now called on the first update (any of Update / FixedUpdate / LateUpdate). Previously the default state was assigned without `OnEnter` and the first frame was skipped.
+* FSM: `ToState<T>()` logs a warning when the state is not registered instead of failing silently.
+* FSM: `AIBehaviour` no longer throws `NullReferenceException` when `Init()` did not create `StateMachine`; it logs an error instead.
+
+### Added
+
+* FSM: Any State transitions (`from = null`, `AIBehaviour.AddAnyTransition(to, check)`).
+* FSM: `Transition(from, to, check)` constructor and `AIBehaviour.AddTransition(from, to, check)`.
+* FSM: `StateMachine.AddState`, `GetState<T>()`, `IsInState<T>()`, public `ToState(IState)`, `Start()`, event `OnStateChanged`. `DefaultState` setter registers the state.
+
+### Documentation
+
+* `README.md`: FSM section updated with automatic / Any State transitions and evaluation order.
+
+---
+
 ## [2.0.1] - 2026-10-03
 
 ### Changed

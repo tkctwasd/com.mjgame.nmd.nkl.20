@@ -34,6 +34,14 @@
             _to = toState;
         }
 
+        /// <summary>
+        /// Transition tu chuyen khi check tra true. fromState = null la Any State.
+        /// </summary>
+        public Transition(IState fromState, IState toState, TransitionDelegate check) : this(fromState, toState)
+        {
+            if (check != null) OnCheck += check;
+        }
+
         public bool TransitionCallback()
         {
             if (OnTransition != null)
