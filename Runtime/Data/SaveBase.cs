@@ -2,7 +2,7 @@ using System;
 using UnityEngine;
 
 /// <summary>
-/// Luu/xoa moi DataModule (JSON vao PlayerPrefs, key "data_&lt;TenClass&gt;"): Setting, Avatar, Rate cua package
+/// Luu/xoa moi DataModule (JSON vao PlayerPrefs, key "data_&lt;ten_snake&gt;"): Setting, Avatar, Rate cua package
 /// va moi data game/mode khai bao ke thua DataModule&lt;T&gt;.
 /// Game ke thua 1 class rong (gan len prefab) va them property cho data cua minh de goi DataSave.Instance.X:
 /// <code>public class DataSave : SaveBase&lt;DataSave&gt; { public DataMap DataMap => DataMap.Current; }</code>

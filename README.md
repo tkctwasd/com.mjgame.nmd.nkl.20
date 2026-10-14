@@ -16,7 +16,7 @@ ke thua, override, interface va lua chon tren Inspector.
 
 ### Co gi moi o 3.0
 
-- **Save viet lai theo `DataModule<T>`**: moi khoi data 1 class, tu luu bang key `data_<TenClass>`, goi `T.Current`
+- **Save viet lai theo `DataModule<T>`**: moi khoi data 1 class, tu luu bang key `data_<ten_snake>`, goi `T.Current`
   (hoac `DataSave.Instance.X` neu khai bao property trong `DataSave` cua game). Khong con key / load / save viet tay.
 - `SaveBase` chi con vong doi save; hook override doi thanh event `OnLoaded/OnSaved/OnNewGame/OnDeleted`.
 - Package chi giu `DataSetting` (Audio/Camera/Vibration dung). `DataAvatar`, `DataRate` chuyen ve game.
@@ -210,7 +210,7 @@ Key la type generic: `Register<IPlayer>(this)` va `Register<PlayerController>(th
 > Tai lieu day du (cach hoat dong, quy tac, loi hay gap, chuyen tu ban cu): [Documentation~/Data.md](Documentation~/Data.md)
 
 `SaveBase<T> : Singleton<T>` (game ke thua 1 class `DataSave` lam muc luc property) + `DataModule<T>`:
-moi khoi data la 1 class, tu luu JSON (Newtonsoft) vao PlayerPrefs bang key rieng `data_<TenClass>`.
+moi khoi data la 1 class, tu luu JSON (Newtonsoft) vao PlayerPrefs bang key rieng `data_<ten_snake>`.
 
 - `DataSave` tu load trong `Awake`, DontDestroyOnLoad, tu save khi pause / mat focus / thoat.
 - API: `DataSave.Instance.SaveGame()` (luu moi module da load), `LoadGame()`, `NewGame()` (xoa het roi tao moi), `DeleteSave()`.

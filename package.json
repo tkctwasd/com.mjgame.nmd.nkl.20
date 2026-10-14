@@ -1,15 +1,15 @@
 {
   "name": "com.mjgame.nmd.nkl.20",
-  "version": "3.0.0",
+  "version": "3.0.1",
   "displayName": "mindongun",
   "description": "Core framework dung chung cho game mobile Unity. Save theo DataModule tu 3.0.0 (xem Documentation~/Data.md). Bao gom UI, Save, Pool, StateMachine, Audio, Camera, Joystick, Indicator, Trigger, Extensions va Editor Tools.\n\nDOTween can duoc import rieng. Sau khi import, mo Tools > Demigiant > DOTween Utility Panel va Create ASMDEF de tao DOTween.Modules.asmdef.",
   "unity": "2022.3",
   "release": {
-    "version": "3.0.0",
+    "version": "3.0.1",
     "date": "2026-10-14",
     "type": "major",
     "generation": "Core 3",
-    "notes": "Save rebuilt on DataModule<T>: each data block is its own class saved under data_<ClassName>, accessed via T.Current. SaveBase keeps lifecycle + events only.",
+    "notes": "Save rebuilt on DataModule<T>: each data block is its own class saved under data_<snake_name>, accessed via T.Current. SaveBase keeps lifecycle + events only.",
     "breakingChanges": true,
     "newFeatures": [
       "DataModule<T> save blocks (lazy load, auto save/delete)",

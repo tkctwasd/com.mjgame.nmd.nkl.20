@@ -4,6 +4,12 @@ All notable changes to this package will be documented in this file.
 
 ---
 
+# [3.0.1] - 2026-10-14
+
+* `DataModules.KeyOf`: key doi tu `data_<TenClass>` sang `data_` + ten bo tien to `Data`, snake_case (`DataAnimalPen` -> `data_animal_pen`, `DataSetting` -> `data_setting`). Save cu theo key cu khong doc lai (nguoi choi nhu moi).
+
+---
+
 # [3.0.0] - 2026-10-14
 
 > [!IMPORTANT]

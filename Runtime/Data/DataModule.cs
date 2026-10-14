@@ -2,11 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-/// <summary>
-/// Data rieng cua 1 tang/mode, tu luu bang key rieng "data_&lt;TenClass&gt;". Dat file data ngay trong folder tinh nang.
-/// Khai bao: <code>[Serializable] public class DataAnimalPen : DataModule&lt;DataAnimalPen&gt; { }</code>
-/// Doc/ghi: <c>DataAnimalPen.Current</c> (load lan dau khi truy cap, DataSave tu luu khi SaveGame).
-/// </summary>
+
 [Serializable]
 public abstract class DataModule<T> : IDataModule where T : DataModule<T>, new()
 {
@@ -48,7 +44,36 @@ public static class DataModules
 {
     private static readonly List<IDataModule> loaded = new();
 
-    public static string KeyOf(Type type) => "data_" + type.Name;
+    private static readonly Dictionary<Type, string> dictKey = new();
+
+    public static string KeyOf(Type type)
+    {
+        if (dictKey.TryGetValue(type, out var key)) return key;
+
+        string name = type.Name;
+        if (name.Length > 4 && name.StartsWith("Data") && char.IsUpper(name[4])) name = name.Substring(4);
+        key = "data_" + ToSnakeCase(name);
+        dictKey[type] = key;
+        return key;
+    }
+
+    private static string ToSnakeCase(string name)
+    {
+        var sb = new System.Text.StringBuilder(name.Length + 8);
+        for (int i = 0; i < name.Length; i++)
+        {
+            char c = name[i];
+            if (char.IsUpper(c))
+            {
+                bool prevLower = i > 0 && (char.IsLower(name[i - 1]) || char.IsDigit(name[i - 1]));
+                bool acronymEnd = i > 0 && char.IsUpper(name[i - 1]) && i + 1 < name.Length && char.IsLower(name[i + 1]);
+                if (prevLower || acronymEnd) sb.Append('_');
+                sb.Append(char.ToLowerInvariant(c));
+            }
+            else sb.Append(c);
+        }
+        return sb.ToString();
+    }
 
     internal static void Track(IDataModule module)
     {

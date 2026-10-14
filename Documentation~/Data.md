@@ -164,21 +164,21 @@ Can luu ngoai he DataModule (vd file tam, cache): dung thang `JsonDataUtility.Sa
 
 ```
 truy cap T.Current lan dau
-   ├─ co key "data_T" trong PlayerPrefs -> JsonConvert.Deserialize -> T
+   ├─ co key "data_<ten_snake>" trong PlayerPrefs -> JsonConvert.Deserialize -> T
    └─ chua co                           -> new T() -> OnNew()
    -> OnLoaded()
    -> DataModules.Track(module)   (vao danh sach "da load")
    -> giu trong static field, lan sau tra ve ngay
 
-DataSave.SaveGame()            -> moi module da Track: JsonConvert.Serialize -> PlayerPrefs "data_T"
+DataSave.SaveGame()            -> moi module da Track: JsonConvert.Serialize -> PlayerPrefs "data_<ten_snake>"
 DataSave.NewGame/DeleteSave()  -> Unload moi module da load (static = null)
-                                  + xoa key "data_<TenClass>" cua MOI class DataModule trong project (quet reflection)
+                                  + xoa key "data_<ten_snake>" cua MOI class DataModule trong project (quet reflection)
                                   -> lan truy cap sau tao moi
 ```
 
 ### Key
 
-- Key = `"data_" + typeof(T).Name`, vd `DataAnimalPen` -> `data_DataAnimalPen`.
+- Key = `"data_"` + ten class bo tien to `Data`, dang snake_case: `DataAnimalPen` -> `data_animal_pen`, `DataSetting` -> `data_setting`.
 - Key lay tu **ten class** (khong co namespace). Hai class trung ten o namespace khac nhau se de len nhau.
 
 ### Load luoi (lazy)
@@ -248,4 +248,4 @@ Xem / xoa save trong Editor: `Edit > Clear All PlayerPrefs`, hoac goi `DataSave.
 | `public DataX DataX { get; private set; }` | `public DataX DataX => DataX.Current;` (cho goi van la `DataSave.Instance.DataX`) |
 | `protected override void OnXxxGame()` xu ly them | `DataSave.OnLoaded / OnSaved / OnNewGame / OnDeleted += ...` |
 
-Key moi dang `data_<TenClass>` nen save cu khong doc duoc: nguoi choi cu se nhu nguoi choi moi (tru khi tu viet migrate).
+Key moi dang `data_<ten_snake>` nen save cu khong doc duoc: nguoi choi cu se nhu nguoi choi moi (tru khi tu viet migrate).
