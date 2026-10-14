@@ -1,11 +1,14 @@
-﻿using UnityEngine;
+using UnityEngine;
+using UnityEngine.Serialization;
 
 /// <summary>
 /// Attach this script to all the target game objects in the scene.
 /// </summary>
 public class IndicatorTarget : MonoBehaviour
 {
-    public IndicatorType indicatorType;
+    [SerializeField, IndicatorType, FormerlySerializedAs("indicatorType")] int type;
+    /// <summary>Id loai indicator (enum cua game ep sang int). 0 = khong co.</summary>
+    public int Type => type;
     public int DistanceDisplay = 3;
     public Vector2 Offset;
     /// <summary>
@@ -31,21 +34,21 @@ public class IndicatorTarget : MonoBehaviour
         IndicatorManager.Unregister(this);
     }
 
-    public void SetIndicator(IndicatorType type, int distance, Vector2 offset = default)
+    public void SetIndicator(int newType, int distance, Vector2 offset = default)
     {
-        indicatorType = type;
+        type = newType;
         DistanceDisplay = distance;
         Offset = offset;
     }
-    public void SetIndicatorType(IndicatorType newType)
+    public void SetIndicatorType(int newType)
     {
-        if (indicatorType == newType) return;
+        if (type == newType) return;
 
         IndicatorManager.Unregister(this);
 
-        indicatorType = newType;
+        type = newType;
 
-        if (indicatorType != IndicatorType.None)
+        if (type != 0)
             IndicatorManager.Register(this);
     }
 
@@ -59,38 +62,4 @@ public class IndicatorTarget : MonoBehaviour
         float distanceFromCamera = Vector3.Distance(cameraPosition, transform.position);
         return distanceFromCamera;
     }
-}
-public enum IndicatorType
-{
-    None,
-    StealBrainrot,
-    SellBrainrot,
-    GetBrainrot,
-    UpdateBrainrot,
-    TrashBrainrot,
-    TakeBrainrot,
-    UnlockBrainrot,
-    UnlockBase,
-    BuyBase,
-    UnlockLuckyBlock,
-    OpenLuckyBlock,
-    UnlockHouseEnemy,
-    BuyHouseEnemy,
-    UnlockTictacBlock,
-    GetTictacBlock,
-    OpenTictacBlock,
-    UnlockTrail,
-    OpenTrail,
-    X2Cup,
-    SkipCheckpoint,
-    UnlockTreadmill,
-    UnlockJetpack,
-    UnlockUpgradeAnimalPen,
-    BuyUpgradeAnimalPen,
-    TakeEgg,
-    UnlockUpgradeTreadmill,
-    BuyUpgradeTreadmill, 
-    UnlockAnimal,
-    UnlockEgg,
-    StealAnimal
 }

@@ -1,7 +1,8 @@
-﻿using System;
+using System;
 using DG.Tweening;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using UnityExtensions;
@@ -16,7 +17,8 @@ public enum ButtonType
 public class Indicator : MonoBehaviour
 {
     [Header("Config")]
-    public IndicatorType IndicatorType;
+    [SerializeField, IndicatorType, FormerlySerializedAs("IndicatorType")] int type;
+    public int Type => type;
     public ButtonType clickType = ButtonType.Click;
     [SerializeField] private Image circleImage;
 
@@ -141,7 +143,7 @@ public class Indicator : MonoBehaviour
         AudioManager.Instance.AudioClickBtn();
         ActiveHand(false);
         IndicatorManager.RefreshAllActive();
-        Debug.Log($"<color=green>[Indicator]</color> Action: {IndicatorType}");
+        Debug.Log($"<color=green>[Indicator]</color> Action: {type}");
     }
 
     #endregion

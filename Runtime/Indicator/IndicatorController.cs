@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -37,8 +37,8 @@ public class IndicatorController : MonoBehaviour
 
         foreach (var pair in targetsByType)
         {
-            IndicatorType type = pair.Key;
-            if (type == IndicatorType.None || !IndicatorManager.CanShow(type)) continue;
+            int type = pair.Key;
+            if (!IndicatorManager.CanShow(type)) continue;
 
             List<IndicatorTarget> targets = pair.Value;
             IndicatorTarget nearest = null;
@@ -66,7 +66,7 @@ public class IndicatorController : MonoBehaviour
                     {
                         screenPos.z = 0;
 
-                        if (target.Indicator == null || target.Indicator.IndicatorType != type)
+                        if (target.Indicator == null || target.Indicator.Type != type)
                         {
                             target.Indicator = IndicatorManager.GetIndicator(type);
                             // if (target.Indicator != null) target.Indicator.Activate(true);
@@ -116,9 +116,9 @@ public class IndicatorController : MonoBehaviour
         }
     }
 
-    private Indicator GetIndicator(ref Indicator indicator, IndicatorType type)
+    private Indicator GetIndicator(ref Indicator indicator, int type)
     {
-        if (indicator != null && indicator.IndicatorType == type && indicator.gameObject.activeSelf)
+        if (indicator != null && indicator.Type == type && indicator.gameObject.activeSelf)
         {
             return indicator;
         }

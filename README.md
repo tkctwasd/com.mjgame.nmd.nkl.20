@@ -407,25 +407,66 @@ Bat/tat am thanh da doc tu `DataSetting.Current`, noi goi khong can kiem tra lai
 
 ### Indicator
 
-Nut hanh dong noi tren object trong the gioi 3D (mua, mo khoa, lay do...).
+Nut hanh dong noi tren object trong the gioi 3D (mua, mo khoa, lay do...). Hien tren object gan player nhat trong tam, moi loai 1 nut.
 
-Luong hoat dong:
-1. `IndicatorTarget` tren object (`indicatorType`, `DistanceDisplay`, `Offset`) tu dang ky vao `IndicatorManager` khi `OnEnable`.
-2. `IndicatorController` (dat trong HUD) lay vi tri player qua `PlayerBootstrap.Get<IPlayer>()`, hien prefab tuong ung tu `IndicatorConfig`.
-3. Nguoi choi bam: `Indicator.Click()` chay theo `clickType` (`Click`, `Hold` giu cho day vong, `Auto`).
+Package **khong biet ten loai indicator nao**: khoa la `int`, game tu khai bao enum.
 
-| Type | API |
-|---|---|
-| `Indicator` | `IndicatorType`, `clickType`, `hand`, `txt`, `txtTitle`, `ObjectIndicator`; virtual `Refresh()`, `Click()`, `SetText`, `SetTitle`, `Configure(target)`; `Activate`, `ActiveHand`, `StartAuto`, `StopAuto` |
-| `IndicatorTarget` | `SetIndicator(type, distance, offset)`, `SetIndicatorType(type)` |
-| `IndicatorManager` (static) | `SetShowState(type, bool)`, `CanShow(type)`, `GetIndicator(type)`, `RefreshAllActive()` |
-| `IndicatorConfig` (SO, `Create > Indicator > IndicatorConfig`) | Danh sach `{Type, Prefab, Show}`; `GetPrefab(type)`, `CanShow(type)` |
-| `TriggerIndicator` | Cho phep / chan mot loai indicator khi player dung trong vung |
+#### Setup (1 lan cho moi game)
 
+**1. Khai bao enum loai indicator** (o game, vd `Script/Indicator/IndicatorType.cs`):
+```csharp
+[IndicatorTypeEnum]
+public enum IndicatorType
+{
+    None = 0,          // 0 luon la "khong co"
+    UnlockDoor = 1,
+    BuyItem = 2,
+}
+```
+- Gan **so co dinh** cho tung gia tri. Prefab/scene luu so, nen **khong doi so da dung**; them moi lay so tiep theo; xoa thi bo dong, khong dung lai so.
+- Doi ten gia tri thoai mai (du lieu khong luu ten).
+- Moi project chi 1 enum co `[IndicatorTypeEnum]` (drawer lay enum dau tien tim thay).
+
+**2. Extension de goi bang enum** (cung file, tuy chon nhung nen co):
+```csharp
+public static class IndicatorTypeExtensions
+{
+    public static void SetIndicator(this IndicatorTarget target, IndicatorType type, int distance, Vector2 offset = default)
+        => target.SetIndicator((int)type, distance, offset);
+    public static void SetIndicatorType(this IndicatorTarget target, IndicatorType type) => target.SetIndicatorType((int)type);
+    public static void SetShowState(IndicatorType type, bool state) => IndicatorManager.SetShowState((int)type, state);
+}
+```
+
+**3. `IndicatorConfig`**: `Create > Indicator > IndicatorConfig`, dat ten `IndicatorConfig` trong 1 folder `Resources/` (load bang `Resources.Load` khi khoi dong).
+- `IsEnabled`: tat toan bo indicator.
+- `AutoClickTime`: giay giu truoc khi tu bam (che do `Auto`).
+- `Indicators`: moi dong `{ Type, Prefab, Show }`, chon `Type` tu dropdown.
+
+**4. `IndicatorController`**: dat 1 object co component nay trong Canvas HUD (cho phep tat san). Indicator duoc spawn lam con cua no.
+
+**5. Player** implement `IPlayer` va dang ky vao `PlayerBootstrap` (controller lay vi tri player de tinh khoang cach).
+
+#### Them 1 loai indicator moi
+
+1. Them gia tri vao enum: `OpenChest = 3`.
+2. Tao prefab UI (Button + `Image` vong tron, `hand`, `txt`, `txtTitle`), gan component `Indicator` hoac lop con, chon `Type = OpenChest`, chon `clickType`.
+3. Them dong vao `IndicatorConfig`: `Type = OpenChest`, `Prefab` vua tao.
+4. Tren object 3D: them `IndicatorTarget`, chon `Type = OpenChest`, chinh `DistanceDisplay` (ban kinh hien, met) va `Offset` (lech theo pixel man hinh).
+
+Gan type luc runtime (object pool, type doi theo trang thai):
+```csharp
+indicatorTarget.SetIndicator(IndicatorType.OpenChest, distance: 4, offset: new Vector2(0, 50));
+indicatorTarget.SetIndicatorType(IndicatorType.None); // an + huy dang ky
+```
+
+#### Viet logic cho nut
+
+Ke thua `Indicator`, lay object dich qua `ObjectIndicator`:
 ```csharp
 public class IndicatorUnlockDoor : Indicator
 {
-    public override void Refresh()
+    public override void Refresh()          // goi khi hien va sau moi lan bam
     {
         if (ObjectIndicator != null && ObjectIndicator.TryGetComponent(out DoorLock door))
             SetText(Formatter.FormatNumber(door.Price));
@@ -440,8 +481,29 @@ public class IndicatorUnlockDoor : Indicator
 }
 ```
 
-**`enum IndicatorType`** (`Runtime/Indicator/IndicatorTarget.cs`) la cho duy nhat game phai sua trong khung:
-them loai moi **vao cuoi**. Prefab va `IndicatorConfig` luu enum bang so, chen giua se lech het.
+`clickType`: `Click` bam 1 lan; `Hold` giu cho day vong `circleImage`; `Auto` dung yen trong tam `AutoClickTime` giay thi tu bam.
+
+#### Bat / tat theo vung hoac tutorial
+
+- `TriggerIndicator` (collider trigger): player vao vung thi hien loai do, ra thi an.
+- Code: `IndicatorTypeExtensions.SetShowState(IndicatorType.BuyItem, false)`. Loai chua tung set mac dinh **duoc hien**.
+
+#### API
+
+| Type | API |
+|---|---|
+| `Indicator` | `Type` (int), `clickType`, `hand`, `txt`, `txtTitle`, `ObjectIndicator`; virtual `Refresh()`, `Click()`, `SetText`, `SetTitle`, `Configure(target)`; `Activate`, `ActiveHand`, `StartAuto`, `StopAuto` |
+| `IndicatorTarget` | `Type` (int), `DistanceDisplay`, `Offset`; `SetIndicator(int, distance, offset)`, `SetIndicatorType(int)` |
+| `IndicatorManager` (static) | `SetShowState(int, bool)`, `CanShow(int)`, `GetIndicator(int)`, `RefreshAllActive()` |
+| `IndicatorConfig` (SO) | `IsEnabled`, `AutoClickTime`, `Indicators {Type, Prefab, Show}`; `GetPrefab(int)`, `CanShow(int)` |
+| `TriggerIndicator` | Hien / an 1 loai khi player o trong vung |
+| `[IndicatorType]` | Gan len field `int` -> dropdown theo enum `[IndicatorTypeEnum]` |
+
+#### Loi hay gap
+
+- Dropdown hien `(no [IndicatorTypeEnum])`: game chua co enum gan attribute.
+- Field hien `(?)` + o so: so dang luu khong co trong enum (gia tri da bi xoa/doi so).
+- Indicator khong hien: kiem tra `Type != 0`, co dong trong `IndicatorConfig` voi `Prefab`, `IsEnabled`, `SetShowState` chua tat, player da dang ky `IPlayer`, `DistanceDisplay` du lon, co `IndicatorController` trong scene.
 
 ### Interaction
 
@@ -525,7 +587,7 @@ Attribute cho Inspector: `[Button]` (chay ham), `[ReadOnly]`, `[ColorLabel]` / `
 | Panel mo dau / luon tren cung | `PanelRole` tren Inspector: `ShowOnStart` / `AlwaysOnTop` |
 | Vi tri player | Implement `IPlayer`, `PlayerBootstrap.Register<IPlayer>(this)` |
 | Nut HUD | `ButtonXxx : InputButton` |
-| Nut hanh dong tren world | `IndicatorXxx : Indicator` + gia tri moi o cuoi `IndicatorType` |
+| Nut hanh dong tren world | `IndicatorXxx : Indicator` + gia tri moi (so tiep theo) trong enum `[IndicatorTypeEnum]` cua game |
 | Vung trigger | `ItemsTrigger : MonoBehaviour, IItemTrigger` ben game |
 | Object tai su dung | `IPoolable` / `PoolableObject` |
 | Animation, AI | `State`, `AIBehaviour` |

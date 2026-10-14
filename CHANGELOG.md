@@ -4,6 +4,17 @@ All notable changes to this package will be documented in this file.
 
 ---
 
+## [2.1.0] - 2026-10-14
+
+### Changed
+
+* Indicator: bo enum `IndicatorType` (chua ten loai cua game). Package dung `int` lam khoa, game tu khai bao enum:
+  * Field int gan `[IndicatorType]` -> Inspector hien dropdown theo enum game danh dau `[IndicatorTypeEnum]` (drawer o Editor).
+  * `IndicatorTarget.indicatorType` -> `IndicatorTarget.Type` (int); `SetIndicator` / `SetIndicatorType` / `SetShowState` nhan `int`. `0` = None.
+  * `Indicator.IndicatorType` -> `Indicator.Type`; `IndicatorData.Type` kieu int.
+  * Loai chua `SetShowState` mac dinh duoc hien.
+* Migrate tu 2.0.x: tu dong (`FormerlySerializedAs` ten field cu, so enum giu nguyen). Game chi can khai bao enum `[IndicatorTypeEnum]` cung gia tri (so co dinh, khong doi so da dung).
+
 ## [2.0.2] - 2026-10-11
 
 ### Fixed

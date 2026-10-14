@@ -1,6 +1,6 @@
 {
   "name": "com.mjgame.nmd.nkl.20",
-  "version": "2.0.2",
+  "version": "2.1.0",
   "displayName": "mindongun",
   "description": "Core framework dung chung cho game mobile Unity. Core 2.0 duoc xay dung lai voi kien truc, coding structure va workflow moi, thay the Core 1.x. Bao gom UI, Save, Pool, StateMachine, Audio, Camera, Joystick, Indicator, Trigger, Extensions va Editor Tools.\n\nDOTween can duoc import rieng. Sau khi import, mo Tools > Demigiant > DOTween Utility Panel va Create ASMDEF de tao DOTween.Modules.asmdef.",
   "unity": "2022.3",

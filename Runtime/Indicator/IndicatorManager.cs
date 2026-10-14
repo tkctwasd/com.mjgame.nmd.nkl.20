@@ -8,17 +8,13 @@ public class IndicatorManager
     public static IndicatorController Controller { get; private set; }
     static List<Indicator> listIndicator { get; set; } = new();
     static IndicatorConfig config;
-    public static Dictionary<IndicatorType, bool> ShowStates { get; private set; } = new();
-    public static Dictionary<IndicatorType, List<IndicatorTarget>> TargetsByType { get; private set; } = new();
+    public static Dictionary<int, bool> ShowStates { get; private set; } = new();
+    public static Dictionary<int, List<IndicatorTarget>> TargetsByType { get; private set; } = new();
 
     [RuntimeInitializeOnLoadMethod]
     private static void Initialize()
     {
         config = Resources.Load<IndicatorConfig>("IndicatorConfig");
-        foreach (IndicatorType t in System.Enum.GetValues(typeof(IndicatorType)))
-        {
-            if (!ShowStates.ContainsKey(t)) ShowStates[t] = true;
-        }
     }
 
     static void CheckInfo()
@@ -35,8 +31,9 @@ public class IndicatorManager
         }
     }
 
-    public static void SetShowState(IndicatorType type, bool state)
+    public static void SetShowState(int type, bool state)
     {
+        if (type == 0) return;
         ShowStates[type] = state;
         if (!state && TargetsByType.ContainsKey(type))
         {
@@ -53,18 +50,22 @@ public class IndicatorManager
     /// <summary>Giay giu de tu dong bam, lay tu IndicatorConfig.</summary>
     public static float AutoClickTime => config != null ? config.AutoClickTime : 0f;
 
-    public static bool CanShow(IndicatorType type)
+    /// <summary>Loai chua tung SetShowState thi mac dinh duoc hien.</summary>
+    public static bool CanShow(int type)
     {
-        return ShowStates.ContainsKey(type) && ShowStates[type];
+        if (type == 0) return false;
+        return !ShowStates.TryGetValue(type, out bool state) || state;
     }
     public static void Register(IndicatorTarget target)
     {
         CheckInfo();
-        if (!TargetsByType.ContainsKey(target.indicatorType))
-            TargetsByType[target.indicatorType] = new List<IndicatorTarget>();
+        var type = target.Type;
+        if (type == 0) return;
+        if (!TargetsByType.TryGetValue(type, out var targets))
+            TargetsByType[type] = targets = new List<IndicatorTarget>();
 
-        if (!TargetsByType[target.indicatorType].Contains(target))
-            TargetsByType[target.indicatorType].Add(target);
+        if (!targets.Contains(target))
+            targets.Add(target);
     }
 
     public static void Unregister(IndicatorTarget target)
@@ -74,20 +75,22 @@ public class IndicatorManager
 
         target.Indicator = null;
 
-        if (TargetsByType.ContainsKey(target.indicatorType))
-            TargetsByType[target.indicatorType].Remove(target);
+        if (target.Type != 0 && TargetsByType.TryGetValue(target.Type, out var targets))
+            targets.Remove(target);
     }
 
-    public static Indicator GetIndicator(IndicatorType type)
+    public static Indicator GetIndicator(int type)
     {
+        var prefab = config.GetPrefab(type);
+        if (prefab == null) return null;
         for (int i = 0; i < listIndicator.Count; i++)
         {
-            if (!listIndicator[i].Active && type == listIndicator[i].IndicatorType)
+            if (!listIndicator[i].Active && type == listIndicator[i].Type)
             {
                 return listIndicator[i];
             }
         }
-        var result = GameObject.Instantiate(config.GetPrefab(type), Controller.transform);
+        var result = GameObject.Instantiate(prefab, Controller.transform);
         listIndicator.Add(result);
         return result;
     }
