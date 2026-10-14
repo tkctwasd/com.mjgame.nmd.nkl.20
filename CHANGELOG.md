@@ -4,6 +4,48 @@ All notable changes to this package will be documented in this file.
 
 ---
 
+# [3.0.0] - 2026-10-14
+
+> [!IMPORTANT]
+>
+> ## Core 3.0 — Save he moi (DataModule)
+>
+> Moi khoi data la 1 class `DataModule<T>`, tu luu bang key `data_<TenClass>`, truy cap `T.Current`.
+> `SaveBase` chi con vong doi save + event. Tai lieu: `Documentation~/Data.md`.
+
+> [!WARNING]
+>
+> ## Breaking Changes
+>
+> Core `3.x` **khong tuong thich nguoc** voi phan Save cua Core `2.x`: game dang override hook / goi
+> `DataSave.Instance.DataAvatar` / `DataRate` se loi compile; setting cu cua nguoi choi mat (doi key).
+>
+> Huong dan chuyen: `Documentation~/Data.md`, muc "Chuyen tu ban cu".
+
+### Breaking
+
+* Save viet lai theo `DataModule<T>` (xem `Documentation~/Data.md`, muc "Chuyen tu ban cu"):
+  * `SaveBase<T>` bo key va load/save viet tay. Class `DataSave` cua game chi con property `X => X.Current` (muc luc de goi `DataSave.Instance.X`), khong can override.
+  * Hook override `OnLoadGame/OnSaveGame/OnNewGame/OnDeleteSave` -> event static `OnLoaded/OnSaved/OnNewGame/OnDeleted` (dang ky qua `DataSave.OnNewGame += ...`).
+  * Bo `DataAvatar`, `DataRate` khoi package (package khong dung). Game tu khai bao `DataModule` cung ten class neu can.
+  * Bo property `SaveBase.DataAvatar`, `SaveBase.DataRate`; con `SaveBase.DataSetting`.
+  * `DataSetting` thanh `DataModule`: key `data_setting_nmd` -> `data_DataSetting` (setting cu cua nguoi choi mat).
+  * Bo setter `DataSetting.Current` (do DataModule quan ly).
+* File `Runtime/Data/DataSave.cs` doi ten `SaveBase.cs` (giu GUID).
+
+### Added
+
+* `DataModule<T>` (`Runtime/Data/DataModule.cs`): moi khoi data 1 class, tu luu bang key `data_<TenClass>`, truy cap `T.Current` (load lan dau khi truy cap). Hook `OnNew()` (chua co save), `OnLoaded()` (sau moi lan load/tao).
+* `DataModules.SaveAll()` / `DeleteAll()`: `SaveBase` tu goi khi SaveGame va NewGame/DeleteSave. `DeleteAll` xoa key cua moi `DataModule` trong project (ke ca chua load).
+* `Documentation~/Data.md`: cach hoat dong va cach dung he save.
+
+### Changed
+
+* `NewGame()`: xoa moi DataModule truoc roi moi phat `OnNewGame` (truoc day hook game chay truoc roi bi ghi de).
+* README: muc Save va Bat dau nhanh viet lai, link sang `Documentation~/Data.md`.
+
+---
+
 ## [2.1.0] - 2026-10-14
 
 ### Changed

@@ -1,10 +1,11 @@
-# mindongun — Core 2.0
+# mindongun — Core 3.0
 
 | | |
 |---|---|
 | Package | `com.mjgame.nmd.nkl.20` |
 | Ten hien thi | mindongun |
-| Phien ban | **2.0.1** (2026-10-03, Core 2, thay the Core 1.x) |
+| Phien ban | **3.0.0** (2026-10-14, Core 3: Save he moi `DataModule`) — xem [CHANGELOG](CHANGELOG.md) |
+| Tai lieu chi tiet | [Documentation~/Data.md](Documentation~/Data.md) (Save) |
 | Unity | 2022.3 tro len |
 | Tac gia | mindongun |
 
@@ -12,6 +13,14 @@ Khung dung chung cho game mobile Unity (hybrid-casual). Gom he thong UI, Save, P
 Audio, Camera, Joystick, Indicator, Interaction, Extensions va tool Editor.
 Khung la **assembly rieng** va **khong goi toi bat ky class nao cua game**: game cam vao khung bang
 ke thua, override, interface va lua chon tren Inspector.
+
+### Co gi moi o 3.0
+
+- **Save viet lai theo `DataModule<T>`**: moi khoi data 1 class, tu luu bang key `data_<TenClass>`, goi `T.Current`
+  (hoac `DataSave.Instance.X` neu khai bao property trong `DataSave` cua game). Khong con key / load / save viet tay.
+- `SaveBase` chi con vong doi save; hook override doi thanh event `OnLoaded/OnSaved/OnNewGame/OnDeleted`.
+- Package chi giu `DataSetting` (Audio/Camera/Vibration dung). `DataAvatar`, `DataRate` chuyen ve game.
+- **Nang tu 2.x**: lam theo muc "Chuyen tu ban cu" trong [Documentation~/Data.md](Documentation~/Data.md). Setting cu cua nguoi choi se mat (doi key).
 
 ## Muc luc
 
@@ -99,16 +108,21 @@ Set up toi thieu cho mot game moi:
 **1. Save cua game**
 
 ```csharp
-public partial class DataSave : SaveBase<DataSave>
+// 1 class trong game (gan len prefab Bootstrap), chi chua property de goi DataSave.Instance.X
+public class DataSave : SaveBase<DataSave>
 {
-    public DataGame DataGame { get; private set; }
-    private const string KEY_GAME = "data_game_fls";
-
-    protected override void OnLoadGame() => DataGame = JsonDataUtility.LoadData<DataGame>(KEY_GAME) ?? new DataGame();
-    protected override void OnSaveGame() => JsonDataUtility.SaveData(KEY_GAME, DataGame);
-    protected override void OnNewGame() => DataGame = new DataGame();
-    protected override void OnDeleteSave() => JsonDataUtility.DeleteData(KEY_GAME);
+    public DataGame DataGame => DataGame.Current;
 }
+
+// Data cua game: moi khoi data 1 class, dat trong folder tinh nang dung no
+[Serializable]
+public class DataGame : DataModule<DataGame>
+{
+    public double Money;
+}
+
+// Dung o bat cu dau
+DataSave.Instance.DataGame.Money += 10;
 ```
 
 `DataSave` phai **ton tai luc chay** (prefab trong Bootstrap o buoc 3, hoac
@@ -193,28 +207,71 @@ Key la type generic: `Register<IPlayer>(this)` va `Register<PlayerController>(th
 
 ### Save
 
-`SaveBase<T> : Singleton<T>` — luu JSON (Newtonsoft) vao PlayerPrefs.
+> Tai lieu day du (cach hoat dong, quy tac, loi hay gap, chuyen tu ban cu): [Documentation~/Data.md](Documentation~/Data.md)
 
-- Tu load trong `Awake`, DontDestroyOnLoad, tu save khi pause / mat focus / thoat.
-- Data chung moi game: `DataSetting`, `DataAvatar`, `DataRate`.
-- Data cua package khac (vd `DataMonetization` cua Monetization) do `DataSave` cua game giu va luu,
-  roi gan vao static `Current` cua class do (package khong thay duoc `DataSave`).
-- API: `SaveGame()`, `LoadGame()`, `NewGame()`, `DeleteSave()`.
-- Hook cho game: `OnLoadGame`, `OnSaveGame`, `OnNewGame`, `OnDeleteSave` (xem [Bat dau nhanh](#bat-dau-nhanh)).
+`SaveBase<T> : Singleton<T>` (game ke thua 1 class `DataSave` lam muc luc property) + `DataModule<T>`:
+moi khoi data la 1 class, tu luu JSON (Newtonsoft) vao PlayerPrefs bang key rieng `data_<TenClass>`.
+
+- `DataSave` tu load trong `Awake`, DontDestroyOnLoad, tu save khi pause / mat focus / thoat.
+- API: `DataSave.Instance.SaveGame()` (luu moi module da load), `LoadGame()`, `NewGame()` (xoa het roi tao moi), `DeleteSave()`.
+- Can xu ly them: dang ky event static `DataSave.OnLoaded`, `OnSaved`, `OnNewGame`, `OnDeleted` (data thuong khong can).
+
+#### Khai bao data moi
+
+```csharp
+using System;
+using System.Collections.Generic;
+using Newtonsoft.Json;
+
+[Serializable]
+public class DataAnimalPen : DataModule<DataAnimalPen>
+{
+    public int Level;
+
+    [JsonProperty(ObjectCreationHandling = ObjectCreationHandling.Replace)]
+    public List<int> Slots = new();
+
+    // Bat buoc: constructor khong tham so (Newtonsoft + tao moi deu dung)
+
+    // Tuy chon: chi chay khi chua co save (gia tri khoi dau khac mac dinh)
+    protected override void OnNew() { Level = 1; }
+
+    // Tuy chon: chay sau moi lan load/tao, va field null / bu phan tu cho save cu
+    protected override void OnLoaded() { Slots ??= new List<int>(); }
+}
+```
+
+Dat file ngay trong folder cua tinh nang (vd `_MODES/ANIMAL/.../DataAnimal.cs`). Khong can dang ky o dau ca.
+
+#### Doc / ghi
+
+```csharp
+DataAnimalPen.Current.Level++;          // lan dau truy cap se load tu PlayerPrefs (hoac tao moi)
+DataSave.Instance.SaveGame();           // luu ngay (khong bat buoc: tu luu khi pause/thoat)
+```
+
+- Chi module **da truy cap** moi duoc luu lai; module chua dung thi save cu giu nguyen.
+- `NewGame()` / `DeleteSave()` xoa key cua **moi** `DataModule` trong project (ke ca chua load) roi tha bo nho;
+  lan truy cap sau tao moi. Khong giu tham chieu `var d = X.Current` qua `NewGame()`: luon goi lai `X.Current`.
+
+#### Data co san cua package
 
 | Class | Truong |
 |---|---|
-| `DataSetting` | `Music`, `Sound`, `Vibrate`, `Sensitivity` (JSON key `Sensivity`), `Distance`; `static Current` = ban dang dung |
-| `DataAvatar` | `SkinCurrent`, `ListSkinUnlocked`, `SetUnlockSkin(id)`, `MAX_SKIN` |
-| `DataRate` | `IsRate`, `NumberShowRate`, `LastShowTime` |
+| `DataSetting` | `Music`, `Sound`, `Vibrate`, `Sensitivity` (JSON key `Sensivity`), `Distance`. Duoc nap san trong `LoadGame` (Audio/Camera doc ngay) |
 
-`JsonDataUtility`: `SaveData(key, obj)`, `LoadData<T>(key)` (tra `default` neu chua co key), `DeleteData(key)`.
+Truy cap: `DataSave.Instance.DataSetting` (co san trong `SaveBase`) hoac `DataSetting.Current`. Avatar, rate... la data cua game (khai bao DataModule ben game).
 
-Luu y khi viet class save:
+#### Luu y khi viet class save
+
+- Key = ten class: **doi ten class la mat save** cua class do. Hai class trung ten (khac namespace) se de key nhau.
 - List dung `[JsonProperty(ObjectCreationHandling = ObjectCreationHandling.Replace)]`, neu khong Newtonsoft se **noi them** vao list tao trong constructor.
 - Doi ten field thi giu key cu: `[JsonProperty("TenCu")]`.
 - Enum luu bang so: chi them gia tri vao cuoi.
-- Bu du lieu cho save cu trong `[OnDeserialized]`.
+- Bu du lieu cho save cu trong `OnLoaded()`.
+- Data dung chung nhieu mode -> dat o tang chung (Common); data rieng 1 mode -> trong folder mode do.
+
+`JsonDataUtility`: `SaveData(key, obj)`, `LoadData<T>(key)` (tra `default` neu chua co key), `DeleteData(key)` — dung truc tiep khi can key tu dat.
 
 ### UI
 
@@ -582,7 +639,7 @@ Attribute cho Inspector: `[Button]` (chay ham), `[ReadOnly]`, `[ColorLabel]` / `
 
 | Khung can gi | Game lam gi |
 |---|---|
-| Data rieng cua game | `DataSave : SaveBase<DataSave>`, override 4 hook |
+| Data rieng cua game | class ke thua `DataModule<T>` + 1 property trong `DataSave : SaveBase<DataSave>` |
 | Setting am thanh, rung, do nhay, camera | Doc/ghi `DataSetting.Current` |
 | Panel mo dau / luon tren cung | `PanelRole` tren Inspector: `ShowOnStart` / `AlwaysOnTop` |
 | Vi tri player | Implement `IPlayer`, `PlayerBootstrap.Register<IPlayer>(this)` |
@@ -643,6 +700,16 @@ dotnet build com.mjgame.nmd.nkl.20.Editor.csproj -v q
   (ham virtual, event, interface, gia tri `PanelRole`) roi de game override.
 - Khung khong duoc tham chieu class cua game (assembly rieng, se khong bien dich). `partial class` khong the chia giua khung va game.
 - Moi lan doi API: tang `version` (va `release`) trong `package.json`, ghi `CHANGELOG.md`, cap nhat tai lieu nay.
+- Danh so theo SemVer `MAJOR.MINOR.PATCH`:
+
+  | Tang | Khi nao | Vi du | Tieu de CHANGELOG |
+  |---|---|---|---|
+  | PATCH | Chi sua loi, khong doi API | 2.1.0 -> 2.1.1 | `## [2.1.1] - ngay` |
+  | MINOR | Them tinh nang, game dang dung nang len **khong phai sua gi** | 2.1.0 -> 2.2.0 | `## [2.2.0] - ngay` |
+  | MAJOR | Game nang len **se loi compile hoac mat data** (bo/doi ten API, doi key save, doi hanh vi) | 2.1.0 -> 3.0.0 | `# [3.0.0] - ngay` + khung `[!IMPORTANT]` (co gi moi) va `[!WARNING]` (breaking, cach chuyen) |
+
+  Ban MAJOR: cap nhat them `release` (`type: major`, `breakingChanges: true`, `generation`) trong `package.json`
+  va muc "Co gi moi" o dau tai lieu nay.
 - Doi ten assembly runtime: giu nguyen file `.meta` (GUID) de asmdef Editor khong gay.
 
 Lich su thay doi: xem [CHANGELOG.md](CHANGELOG.md).

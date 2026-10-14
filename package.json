@@ -1,31 +1,20 @@
 {
   "name": "com.mjgame.nmd.nkl.20",
-  "version": "2.1.0",
+  "version": "3.0.0",
   "displayName": "mindongun",
-  "description": "Core framework dung chung cho game mobile Unity. Core 2.0 duoc xay dung lai voi kien truc, coding structure va workflow moi, thay the Core 1.x. Bao gom UI, Save, Pool, StateMachine, Audio, Camera, Joystick, Indicator, Trigger, Extensions va Editor Tools.\n\nDOTween can duoc import rieng. Sau khi import, mo Tools > Demigiant > DOTween Utility Panel va Create ASMDEF de tao DOTween.Modules.asmdef.",
+  "description": "Core framework dung chung cho game mobile Unity. Save theo DataModule tu 3.0.0 (xem Documentation~/Data.md). Bao gom UI, Save, Pool, StateMachine, Audio, Camera, Joystick, Indicator, Trigger, Extensions va Editor Tools.\n\nDOTween can duoc import rieng. Sau khi import, mo Tools > Demigiant > DOTween Utility Panel va Create ASMDEF de tao DOTween.Modules.asmdef.",
   "unity": "2022.3",
   "release": {
-    "version": "2.0.0",
-    "date": "2026-09-23",
+    "version": "3.0.0",
+    "date": "2026-10-14",
     "type": "major",
-    "generation": "Core 2",
-    "notes": "New generation of MJGame Core. Completely rebuilt from the ground up and replaces the legacy Core 1.x architecture.",
+    "generation": "Core 3",
+    "notes": "Save rebuilt on DataModule<T>: each data block is its own class saved under data_<ClassName>, accessed via T.Current. SaveBase keeps lifecycle + events only.",
     "breakingChanges": true,
     "newFeatures": [
-      "New core architecture",
-      "New coding structure and conventions",
-      "New modular framework structure",
-      "Rebuilt UI system",
-      "Rebuilt Pool system",
-      "Rebuilt StateMachine system",
-      "Rebuilt Save system",
-      "Rebuilt Audio system",
-      "Rebuilt Camera system",
-      "Rebuilt Joystick system",
-      "Rebuilt Indicator system",
-      "New Trigger utilities",
-      "New Extensions",
-      "New Editor tools"
+      "DataModule<T> save blocks (lazy load, auto save/delete)",
+      "SaveBase events OnLoaded/OnSaved/OnNewGame/OnDeleted",
+      "Documentation~/Data.md"
     ]
   },
 
