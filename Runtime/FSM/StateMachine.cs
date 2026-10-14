@@ -7,7 +7,9 @@ namespace FSM
 {
     public class StateMachine : IStateMachine
     {
-        public AIBehaviour AIBehaviour { get; }
+        public FSMBehaviour Owner { get; }
+        [Obsolete("Dung Owner")]
+        public FSMBehaviour AIBehaviour => Owner;
         public IState CurrentState
         {
             get
@@ -38,17 +40,19 @@ namespace FSM
         private IState _currentState;
         private IState _defaultState;
         private bool _started;
+        private bool _changing;
+        private IState _pending;
         private Dictionary<Type, IState> _states;
         private List<ITransition> _transitions;
         private Dictionary<IState, List<ITransition>> _transitionsFrom;
         private List<ITransition> _anyTransitions;
-        public StateMachine(AIBehaviour aIBehaviour)
+        public StateMachine(FSMBehaviour owner)
         {
             _transitions = new List<ITransition>();
             _states = new Dictionary<Type, IState>();
             _transitionsFrom = new Dictionary<IState, List<ITransition>>();
             _anyTransitions = new List<ITransition>();
-            AIBehaviour = aIBehaviour;
+            Owner = owner;
         }
 
         /// <summary>
@@ -139,7 +143,6 @@ namespace FSM
 
         private void CheckTransitions()
         {
-            // Any State truoc, roi transition cua state hien tai. Moi frame doi toi da 1 lan.
             if (TryTransitions(_anyTransitions)) return;
             if (_currentState != null && _transitionsFrom.TryGetValue(_currentState, out var list))
             {
@@ -175,16 +178,31 @@ namespace FSM
         }
         public void ToState(IState state)
         {
-            if (state == _currentState || state == null) return;
+            if (state == null) return;
+            if (_changing)
+            {
+                _pending = state;
+                return;
+            }
+            if (state == _currentState) return;
 
             RegisterState(state);
             _started = true;
+            _changing = true;
             _currentState?.OnExit(state);
             IState oldState = _currentState;
             _currentState = state;
             PrevState = oldState;
             _currentState.OnEnter(oldState);
             OnStateChanged?.Invoke(oldState, state);
+            _changing = false;
+
+            if (_pending != null)
+            {
+                IState next = _pending;
+                _pending = null;
+                ToState(next);
+            }
         }
 
         public void ToPrevState()

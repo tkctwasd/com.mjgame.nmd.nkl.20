@@ -4,6 +4,19 @@ All notable changes to this package will be documented in this file.
 
 ---
 
+# [3.1.0] - 2026-10-14
+
+* FSM (`FSMBehaviour`): may tao luoi `Machine` + `virtual CreateMachine()`; `Init()` khong con abstract (khong can tu `new StateMachine(this)`).
+* Them `Add<T>(m => new StateX(m))` (dang ky 1 lan), `SetState<T>()`, `IsState<T>()`, `GetState<T>()`.
+* Them `virtual DeltaTime` (UI chay khi pause: tra `Time.unscaledDeltaTime`).
+* Them `State<TOwner>` (property `Owner` dung kieu).
+* `StateMachine.ToState` goi long trong OnEnter/OnExit/OnStateChanged duoc xep hang, khong con sai thu tu.
+* Doi ten lop goc FSM `AIBehaviour` -> `FSMBehaviour` (ten trung tinh: player, bot, UI, cua...). `AIBehaviour` con lai la lop con `[Obsolete]`, se xoa o 4.0.0.
+* `IStateMachine.Owner` / `StateMachine.Owner` (kieu `FSMBehaviour`) thay `AIBehaviour` (obsolete). Ctor `StateMachine(FSMBehaviour owner)`.
+* Khong pha tuong thich. Xem `Documentation~/FSM.md`.
+
+---
+
 # [3.0.1] - 2026-10-14
 
 * `DataModules.KeyOf`: key doi tu `data_<TenClass>` sang `data_` + ten bo tien to `Data`, snake_case (`DataAnimalPen` -> `data_animal_pen`, `DataSetting` -> `data_setting`). Save cu theo key cu khong doc lai (nguoi choi nhu moi).

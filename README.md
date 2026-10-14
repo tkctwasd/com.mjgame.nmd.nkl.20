@@ -381,9 +381,9 @@ public class Coin : PoolableObject
 | Type | Vai tro |
 |---|---|
 | `State` | Trang thai. Override `OnEnter(prev)`, `OnExit(next)`, `OnUpdate(dt)`, `OnLateUpdate(dt)`, `OnFixedUpdate()`. Co `Timer`, `Parent` |
-| `StateMachine` | `new StateMachine(aiBehaviour)`; `AddTransition(t)`, `AddState(s)`, `ToState<T>()`, `ToState(s)`, `ToPrevState()`, `GetState<T>()`, `IsInState<T>()`, `CurrentState`, `PrevState`, `DefaultState`, event `OnStateChanged(prev, next)` |
+| `StateMachine` | `new StateMachine(owner)`, `Owner`; `AddTransition(t)`, `AddState(s)`, `ToState<T>()`, `ToState(s)`, `ToPrevState()`, `GetState<T>()`, `IsInState<T>()`, `CurrentState`, `PrevState`, `DefaultState`, event `OnStateChanged(prev, next)` |
 | `Transition` | `new Transition(from, to)` hoac `new Transition(from, to, check)`; `from = null` la Any State. Event `OnCheck` (tu chuyen khi tra true), `OnTransition` (tra false de chan) |
-| `AIBehaviour` | MonoBehaviour chu FSM. Implement `Init()` (goi trong `Awake`, phai tao `StateMachine`); `AddTransition(from, to[, check])`, `AddAnyTransition(to, check)`, `AddTransitionsTo(target, froms...)`, `AddState(s)`, `ToState<T>()`; tu goi update cua FSM |
+| `FSMBehaviour` | MonoBehaviour chu FSM (ten cu `AIBehaviour` obsolete). May tao luoi qua `CreateMachine()`; `Add<T>`, `SetState<T>`, `IsState<T>`, `AddTransition(from, to[, check])`, `AddAnyTransition(to, check)`, `AddTransitionsTo(target, froms...)`, `AddState(s)`, `ToState<T>()`; tu goi update cua FSM |
 
 ```csharp
 public class StateEnemyIdle : State
@@ -392,7 +392,7 @@ public class StateEnemyIdle : State
     public override void OnEnter(IState prev) { base.OnEnter(prev); /* bat animation idle */ }
 }
 
-public class EnemyAnim : AIBehaviour
+public class EnemyAnim : FSMBehaviour
 {
     public float Speed;
     public bool IsDead;
@@ -647,7 +647,7 @@ Attribute cho Inspector: `[Button]` (chay ham), `[ReadOnly]`, `[ColorLabel]` / `
 | Nut hanh dong tren world | `IndicatorXxx : Indicator` + gia tri moi (so tiep theo) trong enum `[IndicatorTypeEnum]` cua game |
 | Vung trigger | `ItemsTrigger : MonoBehaviour, IItemTrigger` ben game |
 | Object tai su dung | `IPoolable` / `PoolableObject` |
-| Animation, AI | `State`, `AIBehaviour` |
+| Animation, AI, UI flow | `State`, `State<TOwner>`, `FSMBehaviour` |
 | Am thanh | `AudioData` trong `AudioConfig` + `AudioManager.Instance.PlayXxx(key)` |
 | Prefab song xuyen scene | `BootstrapScene` ben game |
 
